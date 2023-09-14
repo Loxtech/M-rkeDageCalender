@@ -1,0 +1,60 @@
+﻿@page "/Calender"
+@using System.Globalization
+
+<h3>Calender</h3>
+
+@inject PublicHolidayAPI HolidayAPI
+
+
+
+@code {
+
+    string monthName = "";
+    DateTime monthEnd;
+    int monthsAway = 0;
+    int numDummyColumn = 0;
+    int year = 2023;
+    int month = 0;
+    List<PublicHoliday> items = new List<PublicHoliday>();
+
+    void CreateMonth()
+    {
+        var tempDate = DateTime.Now.AddMonths(monthsAway);
+        month = tempDate.Month;
+        year = tempDate.Year;
+
+        DateTime monthStart = new DateTime(year, month, 1);
+        monthEnd = monthStart.AddMonths(1).AddDays(-1);
+        monthName = DateTimeFormatInfo.CurrentInfo.GetMonthName(month);
+
+        numDummyColumn = (int)monthStart.DayOfWeek;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await HolidayAPI.GetPublicHolidays();
+        CreateMonth();
+    }
+}
+
+<h1>@monthName, @year</h1>
+<button @onclick="() => {monthsAway--; CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
+<button @onclick="() => {monthsAway++; CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
+
+
+<section>
+    @for (int i = 0; i < numDummyColumn; i++)
+    {
+        <div></div>
+    }
+    @for (int i = 1; i <= monthEnd.Day; i++)
+    {
+        <div>
+            <h2>@i</h2>
+            @if (items != null)
+            {
+                <p>@items.</p>
+            }
+        </div>
+    }
+</section>

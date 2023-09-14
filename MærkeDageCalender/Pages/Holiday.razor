@@ -2,20 +2,40 @@
 
 <h3>Holiday</h3>
 
-@if (publicHolidays != null)
+<EditForm Model="@Model" OnSubmit="@Save">
+    <InputNumber @bind-Value="Model.antalDage" />
+    <input type="submit" value="Submit" />
+</EditForm>
+@if (Model.antalDage != 0)
 {
-@foreach (var item in publicHolidays)
-{
-    <div>
-        <h4>@item.LocalName</h4>
-        <p>@item.Date.ToShortDateString()</p>
-    </div>
-}    
+    @if (publicHolidays != null)
+    {
+        @foreach (var item in publicHolidays)
+        {
+            if (dateCheck(@item.Date, Model.antalDage) == true && !@item.Name.Contains("Bank Closing Day"))
+            {
+                <div>
+                    <h4>@item.LocalName</h4>
+                    <p>@item.Date.ToShortDateString()</p>
+                </div>
+            }
+        }
+    }
 }
 
 
 @code {
-    
+    public Number Model { get; set; } = new Number();
+
+    public void Save()
+    {
+        // Save the User model
+    }
+
+    public class Number
+    {
+        public int antalDage { get; set; }
+    }
 
     [Inject]
     public PublicHolidayAPI publicHolidayAPI { get; set; }
@@ -25,4 +45,24 @@
     {
         publicHolidays = await publicHolidayAPI.GetPublicHolidays();
     }
+
+
+    public bool dateCheck(DateTime holidayDate, int antalDage)
+    {
+        //Test
+        DateTime today = new DateTime(2023, 5, 16);
+        DateTime sevenDays = today.AddDays(antalDage);
+
+        //Real
+        //DateTime today = DateTime.Now;
+        //DateTime sevenDays = today.AddDays(antalDage);
+
+        if (holidayDate >= today && holidayDate < sevenDays)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
 }

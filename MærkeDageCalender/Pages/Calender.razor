@@ -2,10 +2,9 @@
 @using System.Globalization
 
 <h3>Calender</h3>
-
-@inject PublicHolidayAPI HolidayAPI
-
-
+<h1>@monthName, @year</h1>
+<button @onclick="() => {monthsAway--; CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
+<button @onclick="() => {monthsAway++; CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
 
 @code {
 
@@ -15,7 +14,7 @@
     int numDummyColumn = 0;
     int year = 2023;
     int month = 0;
-    List<PublicHoliday> items = new List<PublicHoliday>();
+    List<PublicHoliday> publicHolidays = new List<PublicHoliday>();
 
     void CreateMonth()
     {
@@ -32,15 +31,24 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var items = await HolidayAPI.GetPublicHolidays();
         CreateMonth();
+        await GetPublicHolidays();
+    }
+
+    public async Task GetPublicHolidays()
+    {
+        var httpClient = new HttpClient();
+        var response = await httpClient.GetFromJsonAsync<List<PublicHoliday>>($"https://date.nager.at/api/v3/publicholidays/2023/DK");
+        if (response != null)
+        {
+            publicHolidays = response;
+        }
+        else
+        {
+            throw new Exception();
+        }
     }
 }
-
-<h1>@monthName, @year</h1>
-<button @onclick="() => {monthsAway--; CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
-<button @onclick="() => {monthsAway++; CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
-
 
 <section>
     @for (int i = 0; i < numDummyColumn; i++)
@@ -49,11 +57,13 @@
     }
     @for (int i = 1; i <= monthEnd.Day; i++)
     {
+        var calenderItem = publicHolidays.FirstOrDefault(n => n.Date == new DateTime(year, month, i));
+
         <div>
             <h2>@i</h2>
-            @if (items != null)
+            @if (calenderItem != null)
             {
-                <p>@items.</p>
+                <p style="color: blue">@calenderItem.LocalName</p>
             }
         </div>
     }

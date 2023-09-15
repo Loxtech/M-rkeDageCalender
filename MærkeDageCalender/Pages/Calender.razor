@@ -1,5 +1,7 @@
 ﻿@page "/Calender"
 @using System.Globalization
+@using Newtonsoft.Json;
+@using System.Net.Http.Json
 
 <h3>Calender</h3>
 <h1>@monthName, @year</h1>
@@ -14,7 +16,7 @@
     int numDummyColumn = 0;
     int year = 2023;
     int month = 0;
-    List<PublicHoliday> publicHolidays = new List<PublicHoliday>();
+    List<PublicHoliday> publicHolidaysList = new List<PublicHoliday>();
 
     void CreateMonth()
     {
@@ -39,35 +41,53 @@
     public async Task GetPublicHolidays()
     {
         var httpClient = new HttpClient();
-        var response = await httpClient.GetFromJsonAsync<List<PublicHoliday>>($"https://date.nager.at/api/v3/publicholidays/2023/DK");
-        //var response = await httpClient.GetFromJsonAsync<List<PublicHoliday>>($"https://api.sallinggroup.com/v1/holidays -H 'Authorization: Bearer <706fa95d-511a-4ce7-bca6-c58f2bd5bf0a>");
-        if (response != null)
+        string apiUrl = "https://api.sallinggroup.com/v1/holidays?startDate=2020-01-01&endDate=2025-12-31";
+        string apiToken = "706fa95d-511a-4ce7-bca6-c58f2bd5bf0a";
+        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiToken}");
+        string jsonContent = "{\"key\": \"\value\"}";
+        HttpContent content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
+
+        //var response = await httpClient.GetFromJsonAsync<List<PublicHoliday>>($"{apiUrl}, Authorization: Bearer {apiToken}");
+        HttpResponseMessage response = await httpClient.GetAsync($"{apiUrl}");
+
+        if (response.IsSuccessStatusCode)
         {
-            publicHolidays = response;
+            //publicHolidaysList = response;
+                string responseBody = await response.Content.ReadAsStringAsync();
+                List<PublicHoliday> apiModels = JsonConvert.DeserializeObject<List<PublicHoliday>>(responseBody);
+                publicHolidaysList.AddRange(apiModels);
         }
         else
-        {
-            throw new Exception();
-        }
+            {
+                // Handle error response
+                Console.WriteLine($"Error: {response.StatusCode}");
+            }
     }
 }
 
 <section>
     @for (int i = 0; i < numDummyColumn; i++)
-            {
-                <div></div>
-            }
-            @for (int i = 1; i <= monthEnd.Day; i++)
-            {
-                var calenderItem = publicHolidays.FirstOrDefault(n => n.Date == new DateTime(year, month, i));
+    {
+        <div></div>
+    }
+    @for (int i = 1; i <= monthEnd.Day; i++)
+    {
+        var calenderItem = publicHolidaysList.FirstOrDefault(n => n.date == new DateTime(year, month, i));
 
-                <div>
-                    <h2>@i</h2>
-                    @if (calenderItem != null)
-                    {
-                        <p style="color: darkblue">@calenderItem.Name</p>
-                        <p style="color: blue">National Holiday?: @calenderItem.LocalName</p>
-                    }
-                </div>
+        <div>
+            <h2>@i</h2>
+            @if (calenderItem != null)
+            {
+                <p style="color: darkblue">@calenderItem.name</p>
+                @if (@calenderItem.nationalHoliday == "false")
+                {
+                    <p style="color: blue">Mærkedag</p>
+                }
+                else if(@calenderItem.nationalHoliday == "true")
+                {
+                    <p style="color: blue">Helligdag</p>
+                }
             }
-        </section>
+        </div>
+    }
+</section>

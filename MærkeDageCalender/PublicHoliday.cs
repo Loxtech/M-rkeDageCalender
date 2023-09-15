@@ -12,4 +12,11 @@
         public int? LaunchYear { get; set; }
         public string[] Types { get; set; }
     }
+
+    //public class PublicHoliday
+    //{
+    //    public DateTime data { get; set; }
+    //    public string name { get; set; }
+    //    public string nationalHoliday { get; set; }
+    //}
 }

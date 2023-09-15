@@ -7,7 +7,7 @@
 <button @onclick="() => {monthsAway++; CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
 
 @code {
-
+    string getMonthName = "";
     string monthName = "";
     DateTime monthEnd;
     int monthsAway = 0;
@@ -24,7 +24,8 @@
 
         DateTime monthStart = new DateTime(year, month, 1);
         monthEnd = monthStart.AddMonths(1).AddDays(-1);
-        monthName = DateTimeFormatInfo.CurrentInfo.GetMonthName(month);
+        getMonthName = DateTimeFormatInfo.CurrentInfo.GetMonthName(month);
+        monthName = $"{getMonthName[0].ToString().ToUpper()}{getMonthName.Substring(1)}";
 
         numDummyColumn = (int)monthStart.DayOfWeek;
     }
@@ -39,6 +40,7 @@
     {
         var httpClient = new HttpClient();
         var response = await httpClient.GetFromJsonAsync<List<PublicHoliday>>($"https://date.nager.at/api/v3/publicholidays/2023/DK");
+        //var response = await httpClient.GetFromJsonAsync<List<PublicHoliday>>($"https://api.sallinggroup.com/v1/holidays -H 'Authorization: Bearer <706fa95d-511a-4ce7-bca6-c58f2bd5bf0a>");
         if (response != null)
         {
             publicHolidays = response;
@@ -52,19 +54,20 @@
 
 <section>
     @for (int i = 0; i < numDummyColumn; i++)
-    {
-        <div></div>
-    }
-    @for (int i = 1; i <= monthEnd.Day; i++)
-    {
-        var calenderItem = publicHolidays.FirstOrDefault(n => n.Date == new DateTime(year, month, i));
-
-        <div>
-            <h2>@i</h2>
-            @if (calenderItem != null)
             {
-                <p style="color: blue">@calenderItem.LocalName</p>
+                <div></div>
             }
-        </div>
-    }
-</section>
+            @for (int i = 1; i <= monthEnd.Day; i++)
+            {
+                var calenderItem = publicHolidays.FirstOrDefault(n => n.Date == new DateTime(year, month, i));
+
+                <div>
+                    <h2>@i</h2>
+                    @if (calenderItem != null)
+                    {
+                        <p style="color: darkblue">@calenderItem.Name</p>
+                        <p style="color: blue">National Holiday?: @calenderItem.LocalName</p>
+                    }
+                </div>
+            }
+        </section>

@@ -47,12 +47,10 @@
         string jsonContent = "{\"key\": \"\value\"}";
         HttpContent content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
 
-        //var response = await httpClient.GetFromJsonAsync<List<PublicHoliday>>($"{apiUrl}, Authorization: Bearer {apiToken}");
         HttpResponseMessage response = await httpClient.GetAsync($"{apiUrl}");
 
         if (response.IsSuccessStatusCode)
         {
-            //publicHolidaysList = response;
                 string responseBody = await response.Content.ReadAsStringAsync();
                 List<PublicHoliday> apiModels = JsonConvert.DeserializeObject<List<PublicHoliday>>(responseBody);
                 publicHolidaysList.AddRange(apiModels);

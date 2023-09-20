@@ -1,0 +1,32 @@
+﻿@page "/AddBirthday"
+@using System.Globalization
+@using Newtonsoft.Json;
+@using System.Net.Http.Json
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+
+<h3>Add Birthday</h3>
+
+<form @onsubmit="AddNewBirthday">
+    <div class="form-group">
+        <label for="Name">Navn</label>
+        <input type="text" class="form-control" id="Name" @bind="newBirthday.EventName">
+    </div>
+    <div class="form-group">
+        <label for="Date">Dato</label>
+        <input type="date" class="form-control" id="Date" @bind="newBirthday.Date">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Birthday</button>
+</form>
+
+
+@code {
+    private BirthdayModel newBirthday = new BirthdayModel();
+    public void AddNewBirthday()
+    {
+        var entityService = new EntityService();
+
+        entityService.CreateBirthday(newBirthday);
+        newBirthday = new BirthdayModel();
+    }
+}

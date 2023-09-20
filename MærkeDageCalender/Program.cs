@@ -10,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddTransient<ISqlDataAccess, SqlDataAccess>();
+builder.Services.AddSingleton<Entity>();
+builder.Services.AddTransient<ISqlDataAccess, SqlConAdvanced>();
 builder.Services.AddTransient<IBirthdayData, BirthdayData>();
 
 var app = builder.Build();

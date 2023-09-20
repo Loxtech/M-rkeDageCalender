@@ -9,7 +9,5 @@ section > div {
 }
 
     section > div > p {
-        text-decoration-line: underline;
-        text-decoration-color: green;
         font-size: 20px
     }

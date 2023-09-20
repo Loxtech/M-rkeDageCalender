@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary
 {
-    public class SqlDataAccess : ISqlDataAccess
+    public class SqlConAdvanced : ISqlDataAccess
     {
         private readonly IConfiguration _config;
 
         public string ConnectionStringName { get; set; } = "Default";
 
-        public SqlDataAccess(IConfiguration config)
+        public SqlConAdvanced(IConfiguration config)
         {
             _config = config;
         }

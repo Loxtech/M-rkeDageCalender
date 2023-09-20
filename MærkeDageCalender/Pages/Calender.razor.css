@@ -7,3 +7,9 @@ section > div {
     border: 1px solid black;
     padding: 10px;
 }
+
+    section > div > p {
+        text-decoration-line: underline;
+        text-decoration-color: green;
+        font-size: 20px
+    }

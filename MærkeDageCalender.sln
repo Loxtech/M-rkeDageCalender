@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MærkeDageCalender", "MærkeDageCalender\MærkeDageCalender.csproj", "{6C027506-989C-4976-A3E0-A99BB7518F08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{28398D7B-85C0-476E-B67B-C709375D0F18}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6C027506-989C-4976-A3E0-A99BB7518F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C027506-989C-4976-A3E0-A99BB7518F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C027506-989C-4976-A3E0-A99BB7518F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28398D7B-85C0-476E-B67B-C709375D0F18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28398D7B-85C0-476E-B67B-C709375D0F18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28398D7B-85C0-476E-B67B-C709375D0F18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28398D7B-85C0-476E-B67B-C709375D0F18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

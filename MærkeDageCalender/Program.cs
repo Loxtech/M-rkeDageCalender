@@ -11,8 +11,11 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<Entity>();
+builder.Services.AddSingleton<EntityService>();
 builder.Services.AddTransient<ISqlDataAccess, SqlConAdvanced>();
 builder.Services.AddTransient<IBirthdayData, BirthdayData>();
+
+
 
 var app = builder.Build();
 

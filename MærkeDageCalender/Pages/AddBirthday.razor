@@ -19,14 +19,13 @@
     <button type="submit" class="btn btn-primary">Add Birthday</button>
 </form>
 
-
+@inject EntityService entity
 @code {
     private BirthdayModel newBirthday = new BirthdayModel();
     public void AddNewBirthday()
     {
-        var entityService = new EntityService();
 
-        entityService.CreateBirthday(newBirthday);
+        entity.CreateBirthday(newBirthday);
         newBirthday = new BirthdayModel();
     }
 }

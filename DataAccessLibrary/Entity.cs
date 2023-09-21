@@ -7,7 +7,7 @@ namespace DataAccessLibrary
     public class Entity : DbContext
     {
 
-        public DbSet<BirthdayModel> Birthdays { get; set; }
+        public DbSet<BirthdayModel> BirthdayDB { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Default");
@@ -18,35 +18,35 @@ namespace DataAccessLibrary
     {
         private readonly Entity _dbContext;
 
-        public EntityService()
+        public EntityService(Entity dbContext)
         {
-            _dbContext = new Entity();
-            _dbContext.Database.EnsureCreated();
+            _dbContext = dbContext;
+            
         }
 
         public void CreateBirthday(BirthdayModel birthdayModel)
         {
-            _dbContext.Birthdays.Add(birthdayModel);
+            _dbContext.BirthdayDB.Add(birthdayModel);
             _dbContext.SaveChanges();
         }
 
         public List<BirthdayModel> GetAllBirthdays()
         {
-            return _dbContext.Birthdays.ToList();
+            return _dbContext.BirthdayDB.ToList();
         }
 
         public void UpdateBirthday(BirthdayModel updatedBirthdayModel)
         {
-            _dbContext.Birthdays.Update(updatedBirthdayModel);
+            _dbContext.BirthdayDB.Update(updatedBirthdayModel);
             _dbContext.SaveChanges();
         }
 
         public void DeleteBirthday(int birthdayId)
         {
-            var birthdayToDelete = _dbContext.Birthdays.Find(birthdayId);
+            var birthdayToDelete = _dbContext.BirthdayDB.Find(birthdayId);
             if (birthdayToDelete != null)
             {
-                _dbContext.Birthdays.Remove(birthdayToDelete);
+                _dbContext.BirthdayDB.Remove(birthdayToDelete);
                 _dbContext.SaveChanges();
             }
         }

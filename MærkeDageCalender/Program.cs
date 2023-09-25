@@ -15,7 +15,7 @@ builder.Services.AddScoped<EntityFrameworkCRUD>();
 
 
 // ADO
-builder.Services.AddScoped<AdoCRUD>();
+builder.Services.AddScoped<SqlConnectionCRUD>();
 
 
 

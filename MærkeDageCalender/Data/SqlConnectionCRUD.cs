@@ -4,12 +4,12 @@ using Microsoft.Data.SqlClient;
 
 namespace MærkeDageCalender.Data
 {
-    public class AdoCRUD : ICRUD<BirthdayModel>
+    public class SqlConnectionCRUD : ICRUD<BirthdayModel>
     {
         private IConfiguration _configuration;
         private string? ConnectionString => _configuration["ConnectionStrings:Default"];
 
-        AdoCRUD(IConfiguration configuration)
+        SqlConnectionCRUD(IConfiguration configuration)
         {
             _configuration = configuration;
         }

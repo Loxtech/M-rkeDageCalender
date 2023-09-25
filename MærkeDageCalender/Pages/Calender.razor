@@ -4,6 +4,7 @@
 @using Newtonsoft.Json;
 @using System.Net.Http.Json
 @using DataAccessLibrary
+@using DataAccessLibrary.ApiAccess
 @using DataAccessLibrary.Models
 
 @inject ICRUD<BirthdayModel> _db
@@ -24,8 +25,8 @@
     int numDummyColumn = 0;
     int year = 2023;
     int month = 0;
-    List<PublicHoliday> publicHolidaysList = new List<PublicHoliday>();
-    List<BirthdayModel> birthdays = new List<BirthdayModel>();
+    List<PublicHolidayModel> publicHolidaysList = new List<PublicHolidayModel>();
+    List<BirthdayModel> birthdayList = new List<BirthdayModel>();
 
     private BirthdayModel newBirthday = new BirthdayModel();
     public void AddBirthday()
@@ -51,34 +52,15 @@
     protected override async Task OnInitializedAsync()
     {
         CreateMonth();
-        await GetPublicHolidays();
-        birthdays = _db.ReadAllBirthdays();
+        //await GetPublicHolidays();
+        SallingApiAccess apiAccess = new SallingApiAccess();
+        await apiAccess.GetPublicHolidays(); 
+        List<PublicHolidayModel> publicHolidays = apiAccess.GetPublicHolidaysList(); 
+        birthdayList = _db.ReadAllBirthdays();
     }
 
-    // Load mærkedage from API
-    public async Task GetPublicHolidays()
-    {
-        var httpClient = new HttpClient();
-        string apiUrl = "https://api.sallinggroup.com/v1/holidays?startDate=2020-01-01&endDate=2025-12-31";
-        string apiToken = "706fa95d-511a-4ce7-bca6-c58f2bd5bf0a";
-        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiToken}");
-        string jsonContent = "{\"key\": \"\value\"}";
-        HttpContent content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
-
-        HttpResponseMessage response = await httpClient.GetAsync($"{apiUrl}");
-
-        if (response.IsSuccessStatusCode)
-        {
-                string responseBody = await response.Content.ReadAsStringAsync();
-                List<PublicHoliday> apiModels = JsonConvert.DeserializeObject<List<PublicHoliday>>(responseBody);
-                publicHolidaysList.AddRange(apiModels);
-        }
-        else
-            {
-                // Handle error response
-                Console.WriteLine($"Error: {response.StatusCode}");
-            }
-    }
+     //Load mærkedage from API
+    
 }
 
 <section>
@@ -89,7 +71,7 @@
     @for (int i = 1; i <= monthEnd.Day; i++)
     {
         var calenderItem = publicHolidaysList.FirstOrDefault(n => n.date == new DateTime(year, month, i));
-        var calenderBirthday = birthdays.FirstOrDefault(n => n.Date == new DateTime(year, month, i));
+        var calenderBirthday = birthdayList.FirstOrDefault(n => n.Date == new DateTime(year, month, i));
 
         <div>
             <h2>@i</h2>

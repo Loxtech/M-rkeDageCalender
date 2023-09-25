@@ -1,6 +1,6 @@
-﻿namespace MærkeDageCalender
+﻿namespace DataAccessLibrary.Models
 {
-    public class PublicHoliday
+    public class PublicHolidayModel
     {
         public DateTime date { get; set; }
         public string name { get; set; }

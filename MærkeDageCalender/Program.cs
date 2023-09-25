@@ -1,4 +1,5 @@
 using DataAccessLibrary;
+using DataAccessLibrary.Models;
 using MærkeDageCalender.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddDbContext<EntityFrameworkConnection>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddScoped<EntityFrameworkConnection>();
 builder.Services.AddScoped<EntityFrameworkCRUD>();
-
+builder.Services.AddScoped<BirthdayModel>();
 
 // ADO
 builder.Services.AddScoped<SqlConnectionCRUD>();

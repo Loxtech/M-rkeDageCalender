@@ -3,6 +3,7 @@ using MærkeDageCalender;
 using MærkeDageCalender.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddSingleton<Entity>();
-builder.Services.AddSingleton<EntityService>();
+
+// EF
+builder.Services.AddDbContext<Entity>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddScoped<Entity>();
+builder.Services.AddScoped<EntityService>();
 builder.Services.AddTransient<ISqlDataAccess, SqlConAdvanced>();
 builder.Services.AddTransient<IBirthdayData, BirthdayData>();
 

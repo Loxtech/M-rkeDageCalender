@@ -6,12 +6,9 @@ namespace DataAccessLibrary
 {
     public class Entity : DbContext
     {
-
+        public Entity(DbContextOptions<Entity> options) : base(options) { }
         public DbSet<BirthdayModel> BirthdayDB { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Default");
-        }
+
     }
 
     public class EntityService
@@ -21,13 +18,22 @@ namespace DataAccessLibrary
         public EntityService(Entity dbContext)
         {
             _dbContext = dbContext;
-            
+
         }
 
         public void CreateBirthday(BirthdayModel birthdayModel)
         {
-            _dbContext.BirthdayDB.Add(birthdayModel);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.BirthdayDB.Add(birthdayModel);
+                _dbContext.SaveChanges();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
 
         public List<BirthdayModel> GetAllBirthdays()

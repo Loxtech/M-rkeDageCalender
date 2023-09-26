@@ -7,24 +7,19 @@
 @using DataAccessLibrary.ApiAccess
 @using DataAccessLibrary.Models
 
+
 @inject ICRUD<BirthdayModel> _db
+@inject EntityFrameworkCRUD entity
+@inject SallingApiAccess access
+@inject Month month
 
 <h3>Calender</h3>
-<h1>@monthName, @year</h1>
-<button @onclick="() => {monthsAway--; CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
-<button @onclick="() => {monthsAway++; CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
+<h1>@month.monthName, @month.year</h1>
+<button @onclick="() => {month.monthsAway--; month.CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
+<button @onclick="() => {month.monthsAway++; month.CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
 
 
-@inject EntityFrameworkCRUD entity
 @code{
-
-    string getMonthName = "";
-    string monthName = "";
-    DateTime monthEnd;
-    int monthsAway = 0;
-    int numDummyColumn = 0;
-    int year = 2023;
-    int month = 0;
     List<PublicHolidayModel> publicHolidaysList = new List<PublicHolidayModel>();
     List<BirthdayModel> birthdayList = new List<BirthdayModel>();
 
@@ -35,43 +30,24 @@
         newBirthday = new BirthdayModel();
     }
 
-    void CreateMonth()
-    {
-        var tempDate = DateTime.Now.AddMonths(monthsAway);
-        month = tempDate.Month;
-        year = tempDate.Year;
-
-        DateTime monthStart = new DateTime(year, month, 1);
-        monthEnd = monthStart.AddMonths(1).AddDays(-1);
-        getMonthName = DateTimeFormatInfo.CurrentInfo.GetMonthName(month);
-        monthName = $"{getMonthName[0].ToString().ToUpper()}{getMonthName.Substring(1)}";
-
-        numDummyColumn = (int)monthStart.DayOfWeek;
-    }
-
     protected override async Task OnInitializedAsync()
     {
-        CreateMonth();
-        //await GetPublicHolidays();
-        SallingApiAccess apiAccess = new SallingApiAccess();
-        await apiAccess.GetPublicHolidays(); 
-        List<PublicHolidayModel> publicHolidays = apiAccess.GetPublicHolidaysList(); 
+        month.CreateMonth();        
+        await access.GetPublicHolidays(); 
+        publicHolidaysList = access.GetPublicHolidaysList();
         birthdayList = _db.ReadAllBirthdays();
-    }
-
-     //Load mærkedage from API
-    
+    }    
 }
 
 <section>
-    @for (int i = 0; i < numDummyColumn; i++)
+    @for (int i = 0; i < month.numDummyColumn; i++)
     {
         <div></div>
     }
-    @for (int i = 1; i <= monthEnd.Day; i++)
+    @for (int i = 1; i <= month.monthEnd.Day; i++)
     {
-        var calenderItem = publicHolidaysList.FirstOrDefault(n => n.date == new DateTime(year, month, i));
-        var calenderBirthday = birthdayList.FirstOrDefault(n => n.Date == new DateTime(year, month, i));
+        var calenderItem = publicHolidaysList.FirstOrDefault(n => n.date == new DateTime(month.year, month.currentMonth, i));
+        var calenderBirthday = birthdayList.FirstOrDefault(n => n.Date == new DateTime(month.year, month.currentMonth, i));
 
         <div>
             <h2>@i</h2>
@@ -91,8 +67,6 @@
             @if (calenderBirthday != null)
             {
                 <p style="color: red">@calenderBirthday.EventName fødselsdag</p>
-                
-
             }
         </div>
     }

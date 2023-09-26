@@ -1,4 +1,5 @@
 using DataAccessLibrary;
+using DataAccessLibrary.ApiAccess;
 using DataAccessLibrary.Models;
 using MærkeDageCalender.Data;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,9 @@ builder.Services.AddDbContext<EntityFrameworkConnection>(options => options.UseS
 builder.Services.AddScoped<EntityFrameworkConnection>();
 builder.Services.AddScoped<EntityFrameworkCRUD>();
 builder.Services.AddScoped<BirthdayModel>();
+builder.Services.AddScoped<ICRUD<BirthdayModel>, EntityFrameworkCRUD>();
+builder.Services.AddScoped<SallingApiAccess>();
+builder.Services.AddScoped<Month>();
 
 // ADO
 builder.Services.AddScoped<SqlConnectionCRUD>();

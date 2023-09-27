@@ -1,0 +1,17 @@
+﻿@page "/ConnectionSelection"
+<h3>Select the preferred database connection </h3>
+
+<div class="btn-group btn btn-group-lg" role="group" aria-label="Select:">
+  <input type="radio" class="btn-check" name="btnradio" id="EntityFramework" autocomplete="off" checked>
+  <label class="btn btn-outline-primary" for="EntityFramework">Entity Framework </label>
+
+  <input type="radio" class="btn-check" name="btnradio" id="SqlConnectionADO" autocomplete="off">
+  <label class="btn btn-outline-primary" for="SqlConnectionADO">SqlConnection / ADO </label>
+
+  <input type="radio" class="btn-check" name="btnradio" id="LinQ" autocomplete="off">
+  <label class="btn btn-outline-primary" for="LinQ">LinQ </label>
+</div>
+
+@code {
+
+}

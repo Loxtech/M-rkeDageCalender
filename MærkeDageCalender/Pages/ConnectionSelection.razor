@@ -2,16 +2,22 @@
 <h3>Select the preferred database connection </h3>
 
 <div class="btn-group btn btn-group-lg" role="group" aria-label="Select:">
-  <input type="radio" class="btn-check" name="btnradio" id="EntityFramework" autocomplete="off" checked>
+  <input type="radio" class="btn-check" name="btnradio" id="EntityFramework" value=1 @onchange="RadioChanged" autocomplete="off" checked>
   <label class="btn btn-outline-primary" for="EntityFramework">Entity Framework </label>
 
-  <input type="radio" class="btn-check" name="btnradio" id="SqlConnectionADO" autocomplete="off">
+  <input type="radio" class="btn-check" name="btnradio" id="SqlConnectionADO" value=2 @onchange="RadioChanged" autocomplete="off">
   <label class="btn btn-outline-primary" for="SqlConnectionADO">SqlConnection / ADO </label>
 
-  <input type="radio" class="btn-check" name="btnradio" id="LinQ" autocomplete="off">
+  <input type="radio" class="btn-check" name="btnradio" id="LinQ" value="3" @onchange="RadioChanged" autocomplete="off">
   <label class="btn btn-outline-primary" for="LinQ">LinQ </label>
 </div>
 
 @code {
+    public string selectedOption { get; set; } = "1";
+
+    private void RadioChanged(ChangeEventArgs e)
+    {
+        selectedOption = e.Value.ToString();
+    }
 
 }

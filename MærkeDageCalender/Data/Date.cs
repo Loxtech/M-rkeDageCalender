@@ -2,7 +2,7 @@
 
 namespace MærkeDageCalender.Data
 {
-    public class Month
+    public class Date
     {
         public string getMonthName = "";
         public string monthName = "";

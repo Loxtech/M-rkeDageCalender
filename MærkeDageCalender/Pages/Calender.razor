@@ -11,12 +11,12 @@
 @inject ICRUD<BirthdayModel> _db
 @inject EntityFrameworkCRUD entity
 @inject SallingApiAccess access
-@inject Month month
+@inject Date date
 
 <h3>Calender</h3>
-<h1>@month.monthName, @month.year</h1>
-<button @onclick="() => {month.monthsAway--; month.CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
-<button @onclick="() => {month.monthsAway++; month.CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
+<h1>@date.monthName, @date.year</h1>
+<button @onclick="() => {date.monthsAway--; date.CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
+<button @onclick="() => {date.monthsAway++; date.CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
 
 
 @code{
@@ -32,7 +32,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        month.CreateMonth();        
+        date.CreateMonth();        
         await access.GetPublicHolidays(); 
         publicHolidaysList = access.GetPublicHolidaysList();
         birthdayList = _db.ReadAllBirthdays();
@@ -40,14 +40,14 @@
 }
 
 <section>
-    @for (int i = 0; i < month.numDummyColumn; i++)
+    @for (int i = 0; i < date.numDummyColumn; i++)
     {
         <div></div>
     }
-    @for (int i = 1; i <= month.monthEnd.Day; i++)
+    @for (int i = 1; i <= date.monthEnd.Day; i++)
     {
-        var calenderItem = publicHolidaysList.FirstOrDefault(n => n.date == new DateTime(month.year, month.currentMonth, i));
-        var calenderBirthday = birthdayList.FirstOrDefault(n => n.Date == new DateTime(month.year, month.currentMonth, i));
+        var calenderItem = publicHolidaysList.FirstOrDefault(n => n.date == new DateTime(date.year, date.currentMonth, i));
+        var calenderBirthday = birthdayList.FirstOrDefault(n => n.Date == new DateTime(date.year, date.currentMonth, i));
 
         <div>
             <h2>@i</h2>

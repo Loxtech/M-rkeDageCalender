@@ -17,7 +17,7 @@ builder.Services.AddScoped<EntityFrameworkCRUD>();
 builder.Services.AddScoped<BirthdayModel>();
 builder.Services.AddScoped<ICRUD<BirthdayModel>, EntityFrameworkCRUD>();
 builder.Services.AddScoped<SallingApiAccess>();
-builder.Services.AddScoped<Month>();
+builder.Services.AddScoped<Date>();
 
 // ADO
 builder.Services.AddScoped<SqlConnectionCRUD>();

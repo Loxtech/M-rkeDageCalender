@@ -8,6 +8,9 @@
 @using DataAccessLibrary.Models
 
 @inject EntityFrameworkCRUD entity
+@inject SqlConnectionCRUD sqlcon
+@inject LinQCRUD linq
+@inject SelectedOptionService SelectedOptionService
 
 <h3>Add Birthday</h3>
 
@@ -25,10 +28,22 @@
 
 @code {
     private BirthdayModel newBirthday = new BirthdayModel();
+
     public void AddNewBirthday()
     {
+        if (SelectedOptionService.SelectedOption == "1")
+        {
+            entity.CreateBirthday(newBirthday);
+        }
+        else if (SelectedOptionService.SelectedOption == "2")
+        {
+            sqlcon.CreateBirthday(newBirthday);
+        }
+        else if (SelectedOptionService.SelectedOption == "3")
+        {
+            linq.CreateBirthday(newBirthday);
+        }
 
-        entity.CreateBirthday(newBirthday);
         newBirthday = new BirthdayModel();
     }
 }

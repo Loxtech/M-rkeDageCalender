@@ -18,6 +18,8 @@ builder.Services.AddScoped<BirthdayModel>();
 builder.Services.AddScoped<ICRUD<BirthdayModel>, EntityFrameworkCRUD>();
 builder.Services.AddScoped<SallingApiAccess>();
 builder.Services.AddScoped<Date>();
+builder.Services.AddScoped<SelectedOptionService>();
+
 
 // ADO
 builder.Services.AddScoped<SqlConnectionCRUD>();

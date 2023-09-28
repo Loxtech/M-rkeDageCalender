@@ -10,8 +10,12 @@
 
 @inject ICRUD<BirthdayModel> _db
 @inject EntityFrameworkCRUD entity
+@inject SqlConnectionCRUD sqlcon
+@inject LinQCRUD linq
 @inject SallingApiAccess access
 @inject Date date
+@inject SelectedOptionService SelectedOptionService
+
 
 <h3>Calender</h3>
 <h1>@date.monthName, @date.year</h1>
@@ -19,24 +23,18 @@
 <button @onclick="() => {date.monthsAway++; date.CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
 
 
-@code{
+@code {
     List<PublicHolidayModel> publicHolidaysList = new List<PublicHolidayModel>();
     List<BirthdayModel> birthdayList = new List<BirthdayModel>();
-
     private BirthdayModel newBirthday = new BirthdayModel();
-    public void AddBirthday()
-    {
-        entity.CreateBirthday(newBirthday);
-        newBirthday = new BirthdayModel();
-    }
 
     protected override async Task OnInitializedAsync()
     {
-        date.CreateMonth();        
-        await access.GetPublicHolidays(); 
+        date.CreateMonth();
+        await access.GetPublicHolidays();
         publicHolidaysList = access.GetPublicHolidaysList();
         birthdayList = _db.ReadAllBirthdays();
-    }    
+    }
 }
 
 <section>
@@ -58,7 +56,7 @@
                 {
                     <p style="color: blue">Mærkedag</p>
                 }
-                else if(@calenderItem.nationalHoliday == "true")
+                else if (@calenderItem.nationalHoliday == "true")
                 {
                     <p style="color: blue">Helligdag</p>
                 }
@@ -67,6 +65,7 @@
             @if (calenderBirthday != null)
             {
                 <p style="color: red">@calenderBirthday.EventName fødselsdag</p>
+
             }
         </div>
     }

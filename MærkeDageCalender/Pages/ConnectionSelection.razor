@@ -1,4 +1,5 @@
 ﻿@page "/ConnectionSelection"
+@using MærkeDageCalender.Data;
 <h3>Select the preferred database connection </h3>
 
 <div class="btn-group btn btn-group-lg" role="group" aria-label="Select:">
@@ -12,12 +13,14 @@
   <label class="btn btn-outline-primary" for="LinQ">LinQ </label>
 </div>
 
+
+@inject SelectedOptionService SelectedOptionService 
+
 @code {
-    public string selectedOption { get; set; } = "1";
 
     private void RadioChanged(ChangeEventArgs e)
     {
-        selectedOption = e.Value.ToString();
+        SelectedOptionService.SelectedOption = e.Value.ToString();
     }
 
 }

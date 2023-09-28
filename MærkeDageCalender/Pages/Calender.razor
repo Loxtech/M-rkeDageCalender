@@ -64,7 +64,7 @@
 
             @if (calenderBirthday != null)
             {
-                <p style="color: red">@calenderBirthday.EventName</p>
+                <p style="color: green">@calenderBirthday.EventName</p>
                 if (SelectedOptionService.SelectedOption == "1")
                 {
                     <button @onclick="() => {entity.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>

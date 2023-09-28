@@ -64,8 +64,23 @@
 
             @if (calenderBirthday != null)
             {
-                <p style="color: red">@calenderBirthday.EventName fødselsdag</p>
-
+                <p style="color: red">@calenderBirthday.EventName</p>
+                if (SelectedOptionService.SelectedOption == "1")
+                {
+                    <button @onclick="() => {entity.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
+                    <button @onclick="() => {entity.DeleteBirthday(calenderBirthday.Id);}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                }
+                else if (SelectedOptionService.SelectedOption == "2")
+                {
+                    <button @onclick="() => {sqlcon.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
+                    <button @onclick="() => {sqlcon.DeleteBirthday(calenderBirthday.Id);}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                }
+                else if (SelectedOptionService.SelectedOption == "3")
+                {
+                    <button @onclick="() => {linq.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
+                    <button @onclick="() => {linq.DeleteBirthday(calenderBirthday.Id);}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                }
+                
             }
         </div>
     }

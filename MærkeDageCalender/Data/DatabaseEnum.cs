@@ -1,6 +1,8 @@
 ﻿namespace MærkeDageCalender.Data
 {
-    public class ModificationTechEnum
-    {
+
+    public enum DatabaseEnum{
+        localDB,
+        CloudDb,
     }
 }

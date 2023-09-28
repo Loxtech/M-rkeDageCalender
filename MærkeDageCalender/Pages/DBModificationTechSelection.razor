@@ -18,10 +18,5 @@
 @inject SelectedOptionService SelectedOptionService 
 
 @code {
-
-    private void RadioChanged(ChangeEventArgs e)
-    {
-        SelectedOptionService.SelectedOption = e.Value.ToString();
-    }
-
+    private void RadioChanged(ChangeEventArgs e) => SelectedOptionService.SelectedOption = e.Value.ToString();
 }

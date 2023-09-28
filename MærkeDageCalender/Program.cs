@@ -10,19 +10,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-// EF
-builder.Services.AddDbContext<EntityFrameworkConnection>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddScoped<EntityFrameworkConnection>();
-builder.Services.AddScoped<EntityFrameworkCRUD>();
-builder.Services.AddScoped<BirthdayModel>();
-builder.Services.AddScoped<ICRUD<BirthdayModel>, EntityFrameworkCRUD>();
+// Services
 builder.Services.AddScoped<SallingApiAccess>();
 builder.Services.AddScoped<Date>();
 builder.Services.AddScoped<SelectedOptionService>();
+builder.Services.AddScoped<BirthdayModel>();
 
+// Entity Framework
+builder.Services.AddDbContext<EntityFrameworkConnection>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddScoped<EntityFrameworkConnection>();
+builder.Services.AddScoped<EntityFrameworkCRUD>();
+builder.Services.AddScoped<ICRUD<BirthdayModel>, EntityFrameworkCRUD>();
 
 // ADO
 builder.Services.AddScoped<SqlConnectionCRUD>();
+
+// LinQ
+builder.Services.AddScoped<LinQCRUD>();
+
+
 
 
 

@@ -3,6 +3,6 @@
 
     public enum DatabaseEnum{
         localDB,
-        CloudDb,
+        cloudDb,
     }
 }

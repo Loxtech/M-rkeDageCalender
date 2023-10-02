@@ -36,7 +36,7 @@
         birthdayList = _db.ReadAllBirthdays();
     }
 
-    void NavigateToYourUrl()
+    void ReloadPage()
     {
         _navigationManager.NavigateTo("/Calender", true);
     }
@@ -74,19 +74,19 @@
                 {
                     <p style="color: blue">Entity</p>
                     <button @onclick="() => {entity.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
-                    <button @onclick="() => {entity.DeleteBirthday(calenderBirthday.Id); NavigateToYourUrl();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    <button @onclick="() => {entity.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
                 }
                 else if (SelectedOptionService.SelectedOption == "2")
                 {
                     <p style="color: blue">SqlCon</p>
                     <button @onclick="() => {sqlcon.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
-                    <button @onclick="() => {sqlcon.DeleteBirthday(calenderBirthday.Id);}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    <button @onclick="() => {sqlcon.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
                 }
                 else if (SelectedOptionService.SelectedOption == "3")
                 {
                     <p style="color: blue">LinQ</p>
                     <button @onclick="() => {linq.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
-                    <button @onclick="() => {linq.DeleteBirthday(calenderBirthday.Id);}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    <button @onclick="() => {linq.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
                 }
                 
             }

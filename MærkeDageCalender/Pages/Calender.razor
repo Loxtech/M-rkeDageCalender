@@ -15,7 +15,7 @@
 @inject SallingApiAccess access
 @inject Date date
 @inject SelectedOptionService SelectedOptionService
-
+@inject NavigationManager _navigationManager
 
 <h3>Calender</h3>
 <h1>@date.monthName, @date.year</h1>
@@ -34,6 +34,11 @@
         await access.GetPublicHolidays();
         publicHolidaysList = access.GetPublicHolidaysList();
         birthdayList = _db.ReadAllBirthdays();
+    }
+
+    void NavigateToYourUrl()
+    {
+        _navigationManager.NavigateTo("/Calender", true);
     }
 }
 
@@ -69,7 +74,7 @@
                 {
                     <p style="color: blue">Entity</p>
                     <button @onclick="() => {entity.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
-                    <button @onclick="() => {entity.DeleteBirthday(calenderBirthday.Id);}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    <button @onclick="() => {entity.DeleteBirthday(calenderBirthday.Id); NavigateToYourUrl();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
                 }
                 else if (SelectedOptionService.SelectedOption == "2")
                 {

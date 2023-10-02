@@ -1,5 +1,42 @@
-﻿<h3>DisplayAllBirthdays</h3>
+﻿@page "/DisplayAllBirthdays"
+
+@using System.Globalization
+@using MærkeDageCalender.Data
+@using Newtonsoft.Json;
+@using System.Net.Http.Json
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+
+@inject ICRUD<BirthdayModel> _db
+@inject EntityFrameworkCRUD entity
+@inject SqlConnectionCRUD sqlcon
+@inject LinQCRUD linq
+@inject SelectedOptionService SelectedOptionService
+
+<h3>All Birthdays</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name of Event</th>
+            <th>Date of Event</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var birthday in birthdayList)
+        {
+            <tr>
+                <td>@birthday.Id</td>
+                <td>@birthday.EventName</td>
+                <td>@birthday.Date.ToShortDateString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
+    List<BirthdayModel> birthdayList = new List<BirthdayModel>();
 
+    protected override async Task OnInitializedAsync() => birthdayList = _db.ReadAllBirthdays();
 }

@@ -1,16 +1,17 @@
 ﻿@page "/DBModificationTechSelection"
 @using MærkeDageCalender.Data;
 
+
 <h3>Select the preferred database modification technology </h3>
 
 <div class="btn-group btn btn-group-lg" role="group" aria-label="Select:">
-  <input type="radio" class="btn-check" name="btnradio" id="EntityFramework" value="1" @onchange="RadioChanged" autocomplete="off" checked=@SelectedOptionService.SelectedOption.Equals("1")>
+    <input type="radio" class="btn-check" name="btnradio" id="EntityFramework" value="@CRUDTypeEnum.entityFramework" @onchange="RadioChanged" autocomplete="off" checked=@(SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())>
   <label class="btn btn-outline-primary" for="EntityFramework">Entity Framework </label>
 
-  <input type="radio" class="btn-check" name="btnradio" id="SqlConnectionADO" value="2" @onchange="RadioChanged" autocomplete="off" checked=@SelectedOptionService.SelectedOption.Equals("2")>
+    <input type="radio" class="btn-check" name="btnradio" id="SqlConnectionADO" value="@CRUDTypeEnum.sqlCon" @onchange="RadioChanged" autocomplete="off" checked=@(SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())>
   <label class="btn btn-outline-primary" for="SqlConnectionADO">SqlConnection / ADO </label>
 
-  <input type="radio" class="btn-check" name="btnradio" id="LinQ" value="3" @onchange="RadioChanged" autocomplete="off" checked=@SelectedOptionService.SelectedOption.Equals("3")>
+    <input type="radio" class="btn-check" name="btnradio" id="LinQ" value="@CRUDTypeEnum.linQ" @onchange="RadioChanged" autocomplete="off" checked=@(SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())>
   <label class="btn btn-outline-primary" for="LinQ">LinQ </label>
 </div>
 

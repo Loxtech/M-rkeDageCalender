@@ -70,19 +70,19 @@
             @if (calenderBirthday != null)
             {
                 <p style="color: green">@calenderBirthday.EventName</p>
-                if (SelectedOptionService.SelectedOption == "1")
+                if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
                 {
                     <p style="color: blue">Entity</p>
                     <button @onclick="() => {entity.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
                     <button @onclick="() => {entity.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
                 }
-                else if (SelectedOptionService.SelectedOption == "2")
+                else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
                 {
                     <p style="color: blue">SqlCon</p>
                     <button @onclick="() => {sqlcon.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
                     <button @onclick="() => {sqlcon.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
                 }
-                else if (SelectedOptionService.SelectedOption == "3")
+                else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
                 {
                     <p style="color: blue">LinQ</p>
                     <button @onclick="() => {linq.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>

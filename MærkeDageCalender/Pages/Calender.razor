@@ -27,6 +27,8 @@
     List<PublicHolidayModel> publicHolidaysList = new List<PublicHolidayModel>();
     List<BirthdayModel> birthdayList = new List<BirthdayModel>();
     private BirthdayModel newBirthday = new BirthdayModel();
+    private UpdatePopup updatePopup;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -40,7 +42,15 @@
     {
         _navigationManager.NavigateTo("/Calender", true);
     }
+
+    void ShowUpdatePopup()
+    {
+        updatePopup.ShowPopup();
+    }
+
 }
+
+<UpdatePopup @ref="updatePopup"/>
 
 <section>
     @for (int i = 0; i < date.numDummyColumn; i++)
@@ -73,7 +83,7 @@
                 if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
                 {
                     <p style="color: blue">Entity</p>
-                    <button @onclick="() => {entity.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
+                    <button @onclick="ShowUpdatePopup" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
                     <button @onclick="() => {entity.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
                 }
                 else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())

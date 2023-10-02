@@ -1,0 +1,58 @@
+﻿@using DataAccessLibrary.ApiAccess;
+@using DataAccessLibrary.Models;
+@using DataAccessLibrary;
+
+@inject ICRUD<BirthdayModel> _db
+@inject EntityFrameworkCRUD entity
+@inject SqlConnectionCRUD sqlcon
+@inject LinQCRUD linq
+@inject SallingApiAccess access
+@inject Date date
+@inject SelectedOptionService SelectedOptionService
+@inject NavigationManager _navigationManager
+
+<h3>UpdatePopup</h3>
+
+@if (showPopup)
+{
+    <div class="popup">
+        <input type="text" @bind="newValue" />
+        <button @onclick="UpdateItem">Update</button>
+        <button @onclick="ClosePopup">Cancel</button>
+    </div>
+}
+
+
+
+@code {
+    bool showPopup = false;
+    BirthdayModel newValue = new BirthdayModel();
+
+    public void ShowPopup()
+    {
+        showPopup = true;
+    }
+
+    public void ClosePopup()
+    {
+        showPopup = false;
+    }
+
+    public void UpdateItem()
+    {
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+        {
+            entity.UpdateBirthday(newValue);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+        {
+            sqlcon.UpdateBirthday(newValue);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+        {
+            linq.UpdateBirthday(newValue);
+        }
+
+        ClosePopup();
+    }
+}

@@ -83,7 +83,7 @@
                 if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
                 {
                     <p style="color: blue">Entity</p>
-                    <button @onclick="ShowUpdatePopup" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
+                    <button @onclick="() => {entity.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
                     <button @onclick="() => {entity.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
                 }
                 else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())

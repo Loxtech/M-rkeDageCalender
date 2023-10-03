@@ -16,7 +16,8 @@
 @if (showPopup)
 {
     <div class="popup">
-        <input type="text" @bind="newValue" />
+        <input type="text" @bind="newNameValue" />
+        <input type="datetime" @bind="newDateValue" />
         <button @onclick="UpdateItem">Update</button>
         <button @onclick="ClosePopup">Cancel</button>
     </div>
@@ -24,6 +25,8 @@
 
 @code {
     bool showPopup = false;
+    string newNameValue = "";
+    DateTime newDateValue = new DateTime();
     BirthdayModel newValue = new BirthdayModel();
 
     public void ShowPopup()

@@ -31,15 +31,15 @@
 
     public void AddNewBirthday()
     {
-        if (SelectedOptionService.SelectedOption == "1")
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
             entity.CreateBirthday(newBirthday);
         }
-        else if (SelectedOptionService.SelectedOption == "2")
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
             sqlcon.CreateBirthday(newBirthday);
         }
-        else if (SelectedOptionService.SelectedOption == "3")
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
             linq.CreateBirthday(newBirthday);
         }

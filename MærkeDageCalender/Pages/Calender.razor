@@ -22,7 +22,8 @@
 <button @onclick="() => {date.monthsAway--; date.CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
 <button @onclick="() => {date.monthsAway++; date.CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
 
-
+@*<UpdatePopup @ref="updatePopup"/>
+*@
 @code {
     List<PublicHolidayModel> publicHolidaysList = new List<PublicHolidayModel>();
     List<BirthdayModel> birthdayList = new List<BirthdayModel>();
@@ -47,10 +48,7 @@
     {
         updatePopup.ShowPopup();
     }
-
 }
-
-<UpdatePopup @ref="updatePopup"/>
 
 <section>
     @for (int i = 0; i < date.numDummyColumn; i++)

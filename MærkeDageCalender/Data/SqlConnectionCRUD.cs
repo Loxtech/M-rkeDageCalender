@@ -79,5 +79,10 @@ namespace MærkeDageCalender.Data
             sqlConnection.Open();
             cmd.ExecuteNonQuery();
         }
+
+        public void GetBirthday(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

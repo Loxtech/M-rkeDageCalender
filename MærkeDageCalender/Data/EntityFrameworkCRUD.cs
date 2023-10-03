@@ -24,6 +24,11 @@ namespace MærkeDageCalender.Data
             return _dbContext.BirthdayDB.ToList();
         }
 
+        public BirthdayModel GetBirthday(int birthdayId)
+        {
+            return _dbContext.BirthdayDB.FirstOrDefault(e => e.Id == birthdayId);
+        }
+
         public void UpdateBirthday(BirthdayModel entity)
         {
             _dbContext.BirthdayDB.Update(entity);
@@ -40,5 +45,9 @@ namespace MærkeDageCalender.Data
             }
         }
 
+        void ICRUD<BirthdayModel>.GetBirthday(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

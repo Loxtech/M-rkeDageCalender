@@ -15,6 +15,11 @@ namespace MærkeDageCalender.Data
             throw new NotImplementedException();
         }
 
+        public void GetBirthday(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<BirthdayModel> ReadAllBirthdays()
         {
             throw new NotImplementedException();

@@ -1,0 +1,83 @@
+﻿@page "/event/update/{int:eventId}"
+
+@using System.Globalization
+@using MærkeDageCalender.Data
+@using Newtonsoft.Json;
+@using System.Net.Http.Json
+@using DataAccessLibrary
+@using DataAccessLibrary.ApiAccess
+@using DataAccessLibrary.Models
+
+@inject ICRUD<BirthdayModel> _db
+@inject EntityFrameworkCRUD entity
+@inject SqlConnectionCRUD sqlcon
+@inject LinQCRUD linq
+@inject SallingApiAccess access
+@inject Date date
+@inject SelectedOptionService SelectedOptionService
+@inject NavigationManager _navigationManager
+
+<h3>Edit Event</h3>
+
+<form>
+    <div class="form-group">
+        <label for="eventDate">Event Date:</label>
+        <input type="date" class="form-control" id="eventDate" @bind="eventDate" />
+    </div>
+    <div class="form-group">
+        <label for="eventName">Event Name:</label>
+        <input type="text" class="form-control" id="eventName" @bind="eventName" />
+    </div>
+    <button type="button" class="btn btn-primary" @onclick="UpdateEvent">Save</button>
+</form>
+
+@code {
+    private int eventId;
+    private DateTime eventDate;
+    private string eventName;
+
+    private BirthdayModel eventData = new BirthdayModel();
+    // Implement methods to retrieve existing event details and perform the update operation
+    // You may need to inject a service or access a database here.
+    // For simplicity, I'll assume a hypothetical EventService.
+
+    private void UpdateEvent()
+    {
+        entity.UpdateBirthday(eventData);
+        // Redirect back to the calendar or event list page after the update.
+        _navigationManager.NavigateTo("/Calender");
+    }
+
+    protected override void OnInitialized()
+    {
+
+        //this.eventData = entity.GetBirthday(eventId);
+        // Load existing event details based on the eventId parameter from the URL.
+        // You can fetch this data from your database or another data source.
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+        {
+            //this.eventData = entity.GetBirthday(eventId);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+        {
+            //this.eventData = sqlcon.GetBirthday(eventId);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+        {
+            //this.eventData = linq.GetBirthday(eventId);
+        }
+
+        var eventData = entity.GetBirthday(eventId);
+
+        if (eventData != null)
+        {
+            eventDate = eventData.Date;
+            eventName = eventData.EventName;
+        }
+        else
+        {
+            // Handle the case when the event with the given ID doesn't exist.
+            // You can redirect or show an error message here.
+        }
+    }
+}

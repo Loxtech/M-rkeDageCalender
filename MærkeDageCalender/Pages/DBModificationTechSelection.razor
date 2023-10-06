@@ -1,6 +1,7 @@
 ﻿@page "/DBModificationTechSelection"
 @using MærkeDageCalender.Data;
 
+@inject SelectedOptionService SelectedOptionService 
 
 <h3>Select the preferred database modification technology </h3>
 
@@ -15,8 +16,6 @@
   <label class="btn btn-outline-primary" for="LinQ">LinQ </label>
 </div>
 
-
-@inject SelectedOptionService SelectedOptionService 
 
 @code {
     private void RadioChanged(ChangeEventArgs e) => SelectedOptionService.SelectedOption = e.Value.ToString();

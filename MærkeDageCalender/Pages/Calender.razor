@@ -7,7 +7,6 @@
 @using DataAccessLibrary.ApiAccess
 @using DataAccessLibrary.Models
 
-
 @inject ICRUD<BirthdayModel> _db
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
@@ -22,14 +21,11 @@
 <button @onclick="() => {date.monthsAway--; date.CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
 <button @onclick="() => {date.monthsAway++; date.CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
 
-@*<UpdatePopup @ref="updatePopup"/>
-*@
 @code {
     List<PublicHolidayModel> publicHolidaysList = new List<PublicHolidayModel>();
     List<BirthdayModel> birthdayList = new List<BirthdayModel>();
     private BirthdayModel newBirthday = new BirthdayModel();
-    private UpdatePopup updatePopup;
-    
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -42,11 +38,6 @@
     void ReloadPage()
     {
         _navigationManager.NavigateTo("/Calender", true);
-    }
-
-    void ShowUpdatePopup()
-    {
-        updatePopup.ShowPopup();
     }
 }
 
@@ -96,7 +87,7 @@
                     <button @onclick="() => {linq.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
                     <button @onclick="() => {linq.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
                 }
-                
+
             }
         </div>
     }

@@ -82,7 +82,25 @@ namespace MærkeDageCalender.Data
 
         public void GetBirthday(int id)
         {
-            throw new NotImplementedException();
+            List<BirthdayModel> birthday = new List<BirthdayModel>();
+            string query = "SELECT FROM BirthdayDB WHERE Id = @Id";
+
+            using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+            using SqlCommand cmd = new SqlCommand(query, sqlConnection);
+
+            sqlConnection.Open();
+            using SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                id = reader.GetInt32(0);
+                DateTime date = reader.GetDateTime(1);
+                string eventName = reader.GetString(2);
+
+                birthday.Add(new BirthdayModel { Id = id, Date = date, EventName = eventName });
+            }
+
+            
         }
     }
 }

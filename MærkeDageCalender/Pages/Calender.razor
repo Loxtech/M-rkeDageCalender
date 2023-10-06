@@ -16,10 +16,15 @@
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
 
+
 <h3>Calender</h3>
 <h1>@date.monthName, @date.year</h1>
 <button @onclick="() => {date.monthsAway--; date.CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
 <button @onclick="() => {date.monthsAway++; date.CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
+<a class="btn btn-login" @onclick="RedirectPage" >Test</a>
+
+<Popup @ref="popupRef" />
+
 
 @code {
     List<PublicHolidayModel> publicHolidaysList = new List<PublicHolidayModel>();
@@ -39,6 +44,15 @@
     {
         _navigationManager.NavigateTo("/Calender", true);
     }
+
+    private Popup? popupRef;
+
+    private void RedirectPage()
+    {
+        // Shows the popup at the center of the screen
+        popupRef.Show("Test");
+    }
+
 }
 
 <section>

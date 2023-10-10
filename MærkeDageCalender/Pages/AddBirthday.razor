@@ -21,26 +21,30 @@
     </div>
     <div class="form-group">
         <label for="Date">Dato</label>
-        <input type="date" class="form-control" id="Date" @bind="newBirthday.Date">
+        <input type="date" class="form-control" id="Date" @bind="selectedDate">
     </div>
     <button type="submit" class="btn btn-primary">Add Birthday</button>
 </form>
 
 @code {
     private BirthdayModel newBirthday = new BirthdayModel();
+    public DateTime selectedDate = DateTime.Now;
 
     public void AddNewBirthday()
     {
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
+            newBirthday.Date = selectedDate;
             entity.CreateBirthday(newBirthday);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
+            newBirthday.Date = selectedDate;
             sqlcon.CreateBirthday(newBirthday);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
+            newBirthday.Date = selectedDate;
             linq.CreateBirthday(newBirthday);
         }
 

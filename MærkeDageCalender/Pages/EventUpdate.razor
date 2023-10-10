@@ -37,26 +37,18 @@
     private string eventName;
 
     private BirthdayModel eventData = new BirthdayModel();
-    // Implement methods to retrieve existing event details and perform the update operation
-    // You may need to inject a service or access a database here.
-    // For simplicity, I'll assume a hypothetical EventService.
 
     private void UpdateEvent()
     {
         entity.UpdateBirthday(eventData);
-        // Redirect back to the calendar or event list page after the update.
         _navigationManager.NavigateTo("/Calender");
     }
 
     protected override void OnInitialized()
     {
-
-        //this.eventData = entity.GetBirthday(eventId);
-        // Load existing event details based on the eventId parameter from the URL.
-        // You can fetch this data from your database or another data source.
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            //this.eventData = entity.GetBirthday(eventId);
+            var entry = entity.GetBirthday(eventId);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
@@ -65,19 +57,6 @@
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
             //this.eventData = linq.GetBirthday(eventId);
-        }
-
-        var eventData = entity.GetBirthday(eventId);
-
-        if (eventData != null)
-        {
-            eventDate = eventData.Date;
-            eventName = eventData.EventName;
-        }
-        else
-        {
-            // Handle the case when the event with the given ID doesn't exist.
-            // You can redirect or show an error message here.
         }
     }
 }*@

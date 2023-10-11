@@ -9,5 +9,9 @@ namespace DataAccessLibrary
         void GetBirthday(int id);
         void UpdateBirthday(T entity);
         void DeleteBirthday(int id);
+
+
+        //void CreateUser(T entity);
+        //void DeleteUser(int id);
     }
 }

@@ -7,13 +7,9 @@ namespace DataAccessLibrary.ApiAccess
     {
 
         public List<PublicHolidayModel> _publicHoliday { get; set; } = new List<PublicHolidayModel>();
-        public List<PublicHolidayModel> GetPublicHolidaysList()
-        {
-            return _publicHoliday;
-        }
 
         // Load mærkedage from API
-        public async Task GetPublicHolidays()
+        public async Task<List<PublicHolidayModel>> GetPublicHolidays()
         {
             var httpClient = new HttpClient();
             DateTime oneYearAgo = DateTime.Now.AddYears(-1);
@@ -34,12 +30,13 @@ namespace DataAccessLibrary.ApiAccess
             {
                 string responseBody = await response.Content.ReadAsStringAsync();
                 List<PublicHolidayModel> apiModels = JsonConvert.DeserializeObject<List<PublicHolidayModel>>(responseBody);
-                _publicHoliday.AddRange(apiModels);
+                return _publicHoliday = apiModels;
             }
             else
             {
                 // Handle error response
                 Console.WriteLine($"Error: {response.StatusCode}");
+                return null;
             }
         }
     }

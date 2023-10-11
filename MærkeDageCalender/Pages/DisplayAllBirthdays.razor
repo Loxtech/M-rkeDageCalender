@@ -39,4 +39,5 @@
     List<BirthdayModel> birthdayList = new List<BirthdayModel>();
 
     protected override async Task OnInitializedAsync() => birthdayList = _db.ReadAllBirthdays();
+    
 }

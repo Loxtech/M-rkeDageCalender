@@ -1,4 +1,4 @@
-﻿@*@page "/event/update/{int:eventId}"
+﻿@page "/event/update/{eventId:int}"
 
 @using System.Globalization
 @using MærkeDageCalender.Data
@@ -16,31 +16,29 @@
 @inject Date date
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
+@inject BirthdayModel birthdayModel
 
 <h3>Edit Event</h3>
 
 <form>
     <div class="form-group">
         <label for="eventDate">Event Date:</label>
-        <input type="date" class="form-control" id="eventDate" @bind="eventDate" />
+        <input type="date" class="form-control" id="eventDate" @bind="birthdayModel.Date" />
     </div>
     <div class="form-group">
         <label for="eventName">Event Name:</label>
-        <input type="text" class="form-control" id="eventName" @bind="eventName" />
+        <input type="text" class="form-control" id="eventName" @bind="birthdayModel.EventName" />
     </div>
     <button type="button" class="btn btn-primary" @onclick="UpdateEvent">Save</button>
 </form>
 
 @code {
-    private int eventId;
-    private DateTime eventDate;
-    private string eventName;
 
-    private BirthdayModel eventData = new BirthdayModel();
+    [Parameter] public int eventId { get; set; }
 
     private void UpdateEvent()
     {
-        entity.UpdateBirthday(eventData);
+        entity.UpdateBirthday(birthdayModel);
         _navigationManager.NavigateTo("/Calender");
     }
 
@@ -48,7 +46,7 @@
     {
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            var entry = entity.GetBirthday(eventId);
+            birthdayModel = entity.GetBirthday(eventId);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
@@ -59,4 +57,4 @@
             //this.eventData = linq.GetBirthday(eventId);
         }
     }
-}*@
+}

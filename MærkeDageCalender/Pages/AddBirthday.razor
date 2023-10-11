@@ -32,19 +32,18 @@
 
     public void AddNewBirthday()
     {
+        newBirthday.Date = selectedDate;
+
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            newBirthday.Date = selectedDate;
             entity.CreateBirthday(newBirthday);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            newBirthday.Date = selectedDate;
             sqlcon.CreateBirthday(newBirthday);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            newBirthday.Date = selectedDate;
             linq.CreateBirthday(newBirthday);
         }
 

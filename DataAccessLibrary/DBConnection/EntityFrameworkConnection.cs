@@ -7,5 +7,6 @@ namespace DataAccessLibrary
     {
         public EntityFrameworkConnection(DbContextOptions<EntityFrameworkConnection> options) : base(options) { }
         public DbSet<BirthdayModel> BirthdayDB { get; set; }
+        public DbSet<UserModel> UserDB { get; set; }
     }
 }

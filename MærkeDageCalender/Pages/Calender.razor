@@ -15,19 +15,18 @@
 @inject Date date
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
-
+@inject PublicHolidayLists holidayLists
 
 <h3>Calender</h3>
 <h1>@date.monthName, @date.year</h1>
 <button @onclick="() => {date.monthsAway--; date.CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
 <button @onclick="() => {date.monthsAway++; date.CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
-<a class="btn btn-login" @onclick="RedirectPage" >Test</a>
+<a class="btn btn-login" @onclick="RedirectPage">Test</a>
 
 <Popup @ref="popupRef" />
 
 
 @code {
-    List<PublicHolidayModel> publicHolidaysList = new List<PublicHolidayModel>();
     List<BirthdayModel> birthdayList = new List<BirthdayModel>();
     private BirthdayModel newBirthday = new BirthdayModel();
 
@@ -35,21 +34,40 @@
     protected override async Task OnInitializedAsync()
     {
         date.CreateMonth();
-        await access.GetPublicHolidays();
-        publicHolidaysList = access.GetPublicHolidaysList();
         birthdayList = _db.ReadAllBirthdays();
+        if (holidayLists.ListofHolidays == null || holidayLists.ListofHolidays.Count == 0)
+        {
+            holidayLists.ListofHolidays = await access.GetPublicHolidays();
+        }
     }
 
     void ReloadPage()
     {
-        _navigationManager.NavigateTo("/Calender", true);
+        //_navigationManager.NavigateTo("/Calender");
     }
+
+    void UpdatePage(int eventId)
+    {
+        _navigationManager.NavigateTo($"/event/update/{eventId}");
+    }
+
 
     private Popup? popupRef;
 
     private void RedirectPage()
     {
         popupRef.Show("Test");
+    }
+
+    private void DeleteAndRefresh(int id)
+    {
+        entity.DeleteBirthday(id);
+        var itemToRemove = birthdayList.FirstOrDefault(item => item.Id == id);
+        if (itemToRemove != null)
+        {
+            birthdayList.Remove(itemToRemove);
+        }
+        StateHasChanged();
     }
 
 }
@@ -61,44 +79,50 @@
     }
     @for (int i = 1; i <= date.monthEnd.Day; i++)
     {
-        var calenderItem = publicHolidaysList.FirstOrDefault(n => n.date == new DateTime(date.year, date.currentMonth, i));
-        var calenderBirthday = birthdayList.FirstOrDefault(n => n.Date == new DateTime(date.year, date.currentMonth, i));
+        @*var calenderItem = publicHolidaysList.Where(n => n.date.Date == new DateTime(date.year, date.currentMonth, i).Date);*@
+        @*var calenderBirthday = birthdayList.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date);*@
 
         <div>
             <h2>@i</h2>
-            @if (calenderItem != null)
+            @if (holidayLists.ListofHolidays != null)
             {
-                <p style="color: darkblue">@calenderItem.name</p>
-                @if (@calenderItem.nationalHoliday == "false")
+                @foreach (var item in holidayLists.ListofHolidays.Where(n => n.date.Date == new DateTime(date.year, date.currentMonth, i).Date))
                 {
-                    <p style="color: blue">Mærkedag</p>
-                }
-                else if (@calenderItem.nationalHoliday == "true")
-                {
-                    <p style="color: blue">Helligdag</p>
+                    <p style="color: darkblue">@item.name</p>
+                    @if (@item.nationalHoliday == "false")
+                    {
+                        <p style="color: blue">Mærkedag</p>
+                    }
+                    else if (@item.nationalHoliday == "true")
+                    {
+                        <p style="color: blue">Helligdag</p>
+                    }
                 }
             }
 
-            @if (calenderBirthday != null)
+            @if (birthdayList != null)
             {
-                <p style="color: green">@calenderBirthday.EventName</p>
-                if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+                @foreach (var birthday in birthdayList.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date))
                 {
-                    <p style="color: blue">Entity</p>
-                    <button @onclick="() => {entity.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
-                    <button @onclick="() => {entity.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
-                }
-                else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
-                {
-                    <p style="color: blue">SqlCon</p>
-                    <button @onclick="() => {sqlcon.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
-                    <button @onclick="() => {sqlcon.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
-                }
-                else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-                {
-                    <p style="color: blue">LinQ</p>
-                    <button @onclick="() => {linq.UpdateBirthday(calenderBirthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
-                    <button @onclick="() => {linq.DeleteBirthday(calenderBirthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    <p style="color: green">@birthday.EventName</p>
+                    if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+                    {
+                        <p style="color: blue">Entity</p>
+                        <button @onclick="() => {UpdatePage(birthday.Id);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
+                        <button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    }
+                    else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+                    {
+                        <p style="color: blue">SqlCon</p>
+                        <button @onclick="() => {sqlcon.UpdateBirthday(birthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
+                        <button @onclick="() => {sqlcon.DeleteBirthday(birthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    }
+                    else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+                    {
+                        <p style="color: blue">LinQ</p>
+                        <button @onclick="() => {linq.UpdateBirthday(birthday);}" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
+                        <button @onclick="() => {linq.DeleteBirthday(birthday.Id); ReloadPage();}" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    }
                 }
 
             }

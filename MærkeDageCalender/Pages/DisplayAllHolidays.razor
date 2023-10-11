@@ -16,6 +16,7 @@
 @inject Date date
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
+@inject PublicHolidayLists holidayLists
 
 <h3>All Holidays</h3>
 
@@ -28,7 +29,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var holiday in publicHolidayList)
+        @foreach (var holiday in holidayLists.ListofHolidays)
         {
             if (dateNow <= holiday.date && holiday.date <= dateFuture)
             {
@@ -43,13 +44,15 @@
 </table>
 
 @code {
-    List<PublicHolidayModel> publicHolidayList = new List<PublicHolidayModel>();
     DateTime dateNow = DateTime.Now;
     DateTime dateFuture = DateTime.Now.AddYears(1);
 
     protected override async Task OnInitializedAsync()
     {
         await access.GetPublicHolidays();
-        publicHolidayList = access.GetPublicHolidaysList();
+         if (holidayLists.ListofHolidays == null || holidayLists.ListofHolidays.Count == 0)
+        {
+            holidayLists.ListofHolidays = await access.GetPublicHolidays();
+        }
     }
 }

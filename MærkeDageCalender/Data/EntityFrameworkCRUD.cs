@@ -49,5 +49,15 @@ namespace MærkeDageCalender.Data
         {
             throw new NotImplementedException();
         }
+
+        public void CreateUser(BirthdayModel entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteUser(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

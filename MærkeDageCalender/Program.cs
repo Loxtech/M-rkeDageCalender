@@ -15,6 +15,7 @@ builder.Services.AddScoped<SallingApiAccess>();
 builder.Services.AddScoped<Date>();
 builder.Services.AddScoped<SelectedOptionService>();
 builder.Services.AddScoped<BirthdayModel>();
+builder.Services.AddScoped<PublicHolidayLists>();
 
 // Entity Framework
 builder.Services.AddDbContext<EntityFrameworkConnection>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));

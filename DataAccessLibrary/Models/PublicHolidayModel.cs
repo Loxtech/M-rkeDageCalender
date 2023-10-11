@@ -6,4 +6,9 @@
         public string name { get; set; }
         public string nationalHoliday { get; set; }
     }
+
+    public class PublicHolidayLists
+    {
+        public List<PublicHolidayModel> ListofHolidays { get; set; }
+    }
 }

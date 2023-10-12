@@ -16,7 +16,6 @@
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
 @inject PublicHolidayLists holidayLists
-@inject BirthdayLists birthdayLists
 
 <h3>Calender</h3>
 <h1>@date.monthName, @date.year</h1>
@@ -25,6 +24,8 @@
 
 
 @code {
+    private List<BirthdayModel> ListofBirthdays = new();
+
     protected override async Task OnInitializedAsync()
     {
         await LoadOnLaunch();
@@ -35,22 +36,28 @@
         date.CreateMonth();
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            birthdayLists.ListofBirthdays = entity.ReadAllBirthdays();
+            ListofBirthdays = entity.ReadAllBirthdays();
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            birthdayLists.ListofBirthdays = sqlcon.ReadAllBirthdays();
+            ListofBirthdays = sqlcon.ReadAllBirthdays();
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            birthdayLists.ListofBirthdays = linq.ReadAllBirthdays();
+            ListofBirthdays = linq.ReadAllBirthdays();
         }
-        
+
         if (holidayLists.ListofHolidays == null || holidayLists.ListofHolidays.Count == 0)
         {
             holidayLists.ListofHolidays = await access.GetPublicHolidays();
         }
         StateHasChanged();
+        
+    }
+
+    void ReloadPage()
+    {
+        _navigationManager.NavigateTo("/Calender", true);
     }
 
     void UpdatePage(int eventId)
@@ -73,10 +80,10 @@
             linq.DeleteBirthday(id);
         }
 
-        var itemToRemove = birthdayLists.ListofBirthdays.FirstOrDefault(item => item.Id == id);
+        var itemToRemove = ListofBirthdays.FirstOrDefault(item => item.Id == id);
         if (itemToRemove != null)
         {
-            birthdayLists.ListofBirthdays.Remove(itemToRemove);
+            ListofBirthdays.Remove(itemToRemove);
         }
         StateHasChanged();
     }
@@ -108,9 +115,9 @@
                 }
             }
 
-            @if (birthdayLists.ListofBirthdays != null)
+            @if (ListofBirthdays != null)
             {
-                @foreach (var birthday in birthdayLists.ListofBirthdays.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date))
+                @foreach (var birthday in ListofBirthdays.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date))
                 {
                     <p style="color: green">@birthday.EventName</p>
                     <p style="color: blue">@SelectedOptionService.SelectedOption.ToString()</p>

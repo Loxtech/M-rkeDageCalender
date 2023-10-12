@@ -38,8 +38,21 @@
 
     private void UpdateEvent()
     {
-        entity.UpdateBirthday(birthdayModel);
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+        {
+            entity.UpdateBirthday(birthdayModel);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+        {
+            sqlcon.UpdateBirthday(birthdayModel);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+        {
+            linq.UpdateBirthday(birthdayModel);
+        }
+
         _navigationManager.NavigateTo("/Calender");
+        
     }
 
     protected override void OnInitialized()
@@ -50,11 +63,11 @@
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            //this.eventData = sqlcon.GetBirthday(eventId);
+            birthdayModel = sqlcon.GetBirthday(eventId);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            //this.eventData = linq.GetBirthday(eventId);
+            birthdayModel = linq.GetBirthday(eventId);
         }
     }
 }

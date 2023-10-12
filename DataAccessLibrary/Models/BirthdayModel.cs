@@ -7,4 +7,9 @@
         public string? EventName { get; set; }
 
     }
+
+    public class BirthdayLists
+    {
+        public List<BirthdayModel> ListofBirthdays { get; set; }
+    }
 }

@@ -21,7 +21,8 @@ namespace MærkeDageCalender.Data
 
         public List<BirthdayModel> ReadAllBirthdays()
         {
-            return _dbContext.BirthdayDB.ToList();
+            var result = _dbContext.BirthdayDB.ToList();
+            return result;
         }
 
         public BirthdayModel GetBirthday(int birthdayId)
@@ -43,21 +44,6 @@ namespace MærkeDageCalender.Data
                 _dbContext.BirthdayDB.Remove(birthdayToDelete);
                 _dbContext.SaveChanges();
             }
-        }
-
-        void ICRUD<BirthdayModel>.GetBirthday(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void CreateUser(BirthdayModel entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteUser(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -20,6 +20,8 @@
 
 <h3>All Holidays</h3>
 
+@if(holidayLists.ListofHolidays != null)
+{
 <table class="table">
     <thead>
         <tr>
@@ -41,8 +43,12 @@
             }
         }
     </tbody>
-</table>
-
+    </table>
+}
+else
+{
+    <p>Loading...</p>
+}
 @code {
     DateTime dateNow = DateTime.Now;
     DateTime dateFuture = DateTime.Now.AddYears(1);
@@ -50,6 +56,7 @@
     protected override async Task OnInitializedAsync()
     {
         await access.GetPublicHolidays();
+
          if (holidayLists.ListofHolidays == null || holidayLists.ListofHolidays.Count == 0)
         {
             holidayLists.ListofHolidays = await access.GetPublicHolidays();

@@ -80,27 +80,29 @@ namespace MærkeDageCalender.Data
             cmd.ExecuteNonQuery();
         }
 
-        public void GetBirthday(int id)
+        public BirthdayModel GetBirthday(int id)
         {
-            List<BirthdayModel> birthday = new List<BirthdayModel>();
-            string query = "SELECT FROM BirthdayDB WHERE Id = @Id";
+            BirthdayModel birthday = new BirthdayModel();
+            string query = "SELECT Id, Date, EventName FROM BirthdayDB WHERE Id = @Id";
 
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
-            using SqlCommand cmd = new SqlCommand(query, sqlConnection);
-
-            sqlConnection.Open();
-            using SqlDataReader reader = cmd.ExecuteReader();
-
-            while (reader.Read())
+            using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
             {
-                id = reader.GetInt32(0);
-                DateTime date = reader.GetDateTime(1);
-                string eventName = reader.GetString(2);
+                cmd.Parameters.AddWithValue("@Id", id);
 
-                birthday.Add(new BirthdayModel { Id = id, Date = date, EventName = eventName });
+                sqlConnection.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        DateTime date = reader.GetDateTime(1);
+                        string eventName = reader.GetString(2);
+
+                        birthday = new BirthdayModel { Id = id, Date = date, EventName = eventName };
+                    }
+                }
             }
-
-            
+            return birthday;
         }
     }
 }

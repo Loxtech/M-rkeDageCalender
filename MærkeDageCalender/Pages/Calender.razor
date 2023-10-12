@@ -55,11 +55,6 @@
         
     }
 
-    void ReloadPage()
-    {
-        _navigationManager.NavigateTo("/Calender", true);
-    }
-
     void UpdatePage(int eventId)
     {
         _navigationManager.NavigateTo($"/event/update/{eventId}");

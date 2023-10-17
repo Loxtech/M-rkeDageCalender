@@ -1,21 +1,9 @@
 ﻿@page "/DisplayAllHolidays"
 
-@using System.Globalization
-@using MærkeDageCalender.Data
-@using Newtonsoft.Json;
-@using System.Net.Http.Json
-@using DataAccessLibrary
 @using DataAccessLibrary.ApiAccess
 @using DataAccessLibrary.Models
 
-@inject ICRUD<BirthdayModel> _db
-@inject EntityFrameworkCRUD entity
-@inject SqlConnectionCRUD sqlcon
-@inject LinQCRUD linq
 @inject SallingApiAccess access
-@inject Date date
-@inject SelectedOptionService SelectedOptionService
-@inject NavigationManager _navigationManager
 @inject PublicHolidayLists holidayLists
 
 <h3>All Holidays</h3>
@@ -49,6 +37,7 @@ else
 {
     <p>Loading...</p>
 }
+
 @code {
     DateTime dateNow = DateTime.Now;
     DateTime dateFuture = DateTime.Now.AddYears(1);
@@ -58,8 +47,8 @@ else
         await access.GetPublicHolidays();
 
          if (holidayLists.ListofHolidays == null || holidayLists.ListofHolidays.Count == 0)
-        {
+         {
             holidayLists.ListofHolidays = await access.GetPublicHolidays();
-        }
+         }
     }
 }

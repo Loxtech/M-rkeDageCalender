@@ -1,18 +1,11 @@
 ﻿@page "/event/update/{eventId:int}"
 
-@using System.Globalization
 @using MærkeDageCalender.Data
-@using Newtonsoft.Json;
-@using System.Net.Http.Json
-@using DataAccessLibrary
-@using DataAccessLibrary.ApiAccess
 @using DataAccessLibrary.Models
 
-@inject ICRUD<BirthdayModel> _db
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
 @inject LinQCRUD linq
-@inject SallingApiAccess access
 @inject Date date
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager

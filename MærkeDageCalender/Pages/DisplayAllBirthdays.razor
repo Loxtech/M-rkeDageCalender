@@ -1,17 +1,9 @@
 ﻿@page "/DisplayAllBirthdays"
 
-@using System.Globalization
-@using MærkeDageCalender.Data
-@using Newtonsoft.Json;
-@using System.Net.Http.Json
 @using DataAccessLibrary
 @using DataAccessLibrary.Models
 
 @inject ICRUD<BirthdayModel> _db
-@inject EntityFrameworkCRUD entity
-@inject SqlConnectionCRUD sqlcon
-@inject LinQCRUD linq
-@inject SelectedOptionService SelectedOptionService
 
 <h3>All Birthdays</h3>
 

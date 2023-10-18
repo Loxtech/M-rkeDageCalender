@@ -1,0 +1,112 @@
+﻿@page "/Users"
+
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+@using MærkeDageCalender.Data
+
+@inject ICRUDUser<UserModel> _db
+@inject SelectedOptionService SelectedOptionService
+@inject EntityFrameworkCRUD entity
+@inject SqlConnectionCRUD sqlcon
+@inject LinQCRUD linq
+@inject NavigationManager _navigationManager
+
+<h3>Add New User</h3>
+<form @onsubmit="AddNewUser">
+    <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName" @bind="newUser.firstName">
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName" @bind="newUser.lastName">
+    </div>
+    <div class="form-group">
+        <label for="Date">Date of Birth</label>
+        <input type="date" class="form-control" id="Date" @bind="selectedDate">
+    </div>
+    <button type="submit" class="btn btn-primary">Add User</button>
+</form>
+
+<h3>All Users</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name of User</th>
+            <th>Users Birthday</th>
+            <th>Delete User</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in UserList)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.firstName @user.lastName</td>
+                <td>@user.birthday.ToShortDateString()</td>
+                <td><button @onclick="() => DeleteAndRefresh(user.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private UserModel newUser = new UserModel();
+    private DateTime selectedDate = new DateTime(2000, 1, 1);
+    List<UserModel> UserList = new List<UserModel>();
+    private List<UserModel> ListofUsers = new();
+
+    protected override async Task OnInitializedAsync() => UserList = _db.ReadAllUsers();
+
+    public void AddNewUser()
+    {
+        newUser.birthday = selectedDate;
+
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+        {
+            entity.CreateUser(newUser);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+        {
+            sqlcon.CreateUser(newUser);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+        {
+            linq.CreateUser(newUser);
+        }
+
+        newUser = new UserModel();
+        StateHasChanged();
+        ReloadPage();
+    }
+
+    private void DeleteAndRefresh(int id)
+    {
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+        {
+            entity.DeleteUser(id);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+        {
+            sqlcon.DeleteUser(id);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+        {
+            linq.DeleteUser(id);
+        }
+
+        var itemToRemove = ListofUsers.FirstOrDefault(item => item.Id == id);
+        if (itemToRemove != null)
+        {
+            ListofUsers.Remove(itemToRemove);
+        }
+        StateHasChanged();
+        ReloadPage();
+    }
+
+    private void ReloadPage()
+    {
+        _navigationManager.NavigateTo("/Users", true);
+    }
+}

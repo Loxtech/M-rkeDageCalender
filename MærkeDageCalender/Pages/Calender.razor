@@ -5,7 +5,7 @@
 @using DataAccessLibrary.ApiAccess
 @using DataAccessLibrary.Models
 
-@inject ICRUD<BirthdayModel> _db
+@inject ICRUDBirthday<BirthdayModel> _db
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
 @inject LinQCRUD linq
@@ -23,6 +23,7 @@
 
 @code {
     private List<BirthdayModel> ListofBirthdays = new();
+    private List<UserModel> ListofUsers = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,22 +36,25 @@
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
             ListofBirthdays = entity.ReadAllBirthdays();
+            ListofUsers = entity.ReadAllUsers();
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
             ListofBirthdays = sqlcon.ReadAllBirthdays();
+            ListofUsers = sqlcon.ReadAllUsers();
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
             ListofBirthdays = linq.ReadAllBirthdays();
+            ListofUsers = linq.ReadAllUsers();
         }
 
         if (holidayLists.ListofHolidays == null || holidayLists.ListofHolidays.Count == 0)
         {
             holidayLists.ListofHolidays = await access.GetPublicHolidays();
         }
+
         StateHasChanged();
-        
     }
 
     void UpdatePage(int eventId)
@@ -89,22 +93,28 @@
     }
     @for (int i = 1; i <= date.monthEnd.Day; i++)
     {
-
         <div>
             <h2>@i</h2>
             @if (holidayLists.ListofHolidays != null)
             {
                 @foreach (var item in holidayLists.ListofHolidays.Where(n => n.date.Date == new DateTime(date.year, date.currentMonth, i).Date))
                 {
-                    <p style="color: darkblue">@item.name</p>
                     @if (@item.nationalHoliday == "false")
                     {
-                        <p style="color: blue">Mærkedag</p>
+                        <p style="color: blue">@item.name</p>
                     }
                     else if (@item.nationalHoliday == "true")
                     {
-                        <p style="color: blue">Helligdag</p>
+                        <p style="color: green">@item.name</p>
                     }
+                }
+            }
+
+            @if (ListofUsers != null)
+                {
+                @foreach (var user in ListofUsers.Where(n => n.birthday.Month == date.currentMonth && n.birthday.Day == i))
+                {
+                    <p style="color: purple">Birthday: @user.firstName @user.lastName</p>
                 }
             }
 
@@ -113,9 +123,9 @@
                 @foreach (var birthday in ListofBirthdays.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date))
                 {
                     <p style="color: green">@birthday.EventName</p>
-                    <p style="color: blue">@SelectedOptionService.SelectedOption.ToString()</p>
                     <button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
                     <button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    <p style="color: blue">@SelectedOptionService.SelectedOption.ToString()</p>
                 }
             }
         </div>

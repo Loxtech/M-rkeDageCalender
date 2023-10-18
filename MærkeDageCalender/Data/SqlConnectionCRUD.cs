@@ -4,7 +4,7 @@ using Microsoft.Data.SqlClient;
 
 namespace MærkeDageCalender.Data
 {
-    public class SqlConnectionCRUD : ICRUD<BirthdayModel>
+    public class SqlConnectionCRUD : ICRUDBirthday<BirthdayModel>, ICRUDUser<UserModel>
     {
         private IConfiguration _configuration;
         private string? ConnectionString => _configuration["ConnectionStrings:Default"];
@@ -14,6 +14,7 @@ namespace MærkeDageCalender.Data
             _configuration = configuration;
         }
 
+        #region EventCRUD
         // Create
         public void CreateBirthday(BirthdayModel entity)
         {
@@ -80,6 +81,7 @@ namespace MærkeDageCalender.Data
             cmd.ExecuteNonQuery();
         }
 
+        // Get(Single)
         public BirthdayModel GetBirthday(int id)
         {
             BirthdayModel birthday = new BirthdayModel();
@@ -104,5 +106,33 @@ namespace MærkeDageCalender.Data
             }
             return birthday;
         }
+        #endregion
+
+        #region UserCRUD
+        public void CreateUser(UserModel user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<UserModel> ReadAllUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public UserModel GetUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateUser(UserModel user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteUser(int id)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

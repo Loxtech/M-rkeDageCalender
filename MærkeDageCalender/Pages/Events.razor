@@ -1,0 +1,116 @@
+﻿@page "/Events"
+
+@using MærkeDageCalender.Data
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+
+@inject ICRUDBirthday<BirthdayModel> _db
+@inject EntityFrameworkCRUD entity
+@inject SqlConnectionCRUD sqlcon
+@inject LinQCRUD linq
+@inject SelectedOptionService SelectedOptionService
+@inject NavigationManager _navigationManager
+
+<h3>Add Events</h3>
+<form @onsubmit="AddNewBirthday">
+    <div class="form-group">
+        <label for="Name">Navn</label>
+        <input type="text" class="form-control" id="Name" @bind="newBirthday.EventName">
+    </div>
+    <div class="form-group">
+        <label for="Date">Dato</label>
+        <input type="date" class="form-control" id="Date" @bind="selectedDate">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Birthday</button>
+</form>
+
+<h3>All Birthdays</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name of Event</th>
+            <th>Date of Event</th>
+            <th>Update Event</th>
+            <th>Delete Event</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var birthday in birthdayList)
+        {
+            <tr>
+                <td>@birthday.Id</td>
+                <td>@birthday.EventName</td>
+                <td>@birthday.Date.ToShortDateString()</td>
+                <td><button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button></td>
+                <td><button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button></td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private BirthdayModel newBirthday = new BirthdayModel();
+    public DateTime selectedDate = DateTime.Now;
+    List<BirthdayModel> birthdayList = new List<BirthdayModel>();
+    private List<BirthdayModel> ListofBirthdays = new();
+
+    protected override async Task OnInitializedAsync() => birthdayList = _db.ReadAllBirthdays();
+
+    public void AddNewBirthday()
+    {
+        newBirthday.Date = selectedDate;
+
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+        {
+            entity.CreateBirthday(newBirthday);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+        {
+            sqlcon.CreateBirthday(newBirthday);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+        {
+            linq.CreateBirthday(newBirthday);
+        }
+
+        newBirthday = new BirthdayModel();
+        StateHasChanged();
+        ReloadPage();
+    }
+    void UpdatePage(int eventId)
+    {
+        _navigationManager.NavigateTo($"/event/update/{eventId}");
+    }
+
+    private void DeleteAndRefresh(int id)
+    {
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+        {
+            entity.DeleteBirthday(id);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+        {
+            sqlcon.DeleteBirthday(id);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+        {
+            linq.DeleteBirthday(id);
+        }
+
+        var itemToRemove = ListofBirthdays.FirstOrDefault(item => item.Id == id);
+        if (itemToRemove != null)
+        {
+            ListofBirthdays.Remove(itemToRemove);
+        }
+
+        StateHasChanged();
+        ReloadPage();
+    }
+
+    private void ReloadPage()
+    {
+        _navigationManager.NavigateTo("/Events");
+    }
+}

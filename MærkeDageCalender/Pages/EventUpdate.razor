@@ -29,6 +29,7 @@
 
     [Parameter] public int eventId { get; set; }
 
+
     private void UpdateEvent()
     {
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
@@ -45,8 +46,6 @@
         }
 
         _navigationManager.NavigateTo("/Calender");
-        
-        
     }
 
     protected override void OnInitialized()

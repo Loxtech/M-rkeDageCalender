@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataAccessLibrary.Models
+﻿namespace DataAccessLibrary.Models
 {
     public class UserModel
     {
@@ -12,5 +6,10 @@ namespace DataAccessLibrary.Models
         public string? firstName { get; set; }
         public string? lastName { get; set; }
         public DateTime birthday { get; set; }
+    }
+
+    public class UserLists
+    {
+        public List<UserModel> ListofUsers { get; set; }
     }
 }

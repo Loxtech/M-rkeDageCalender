@@ -1,10 +1,11 @@
 ﻿using DataAccessLibrary;
 using DataAccessLibrary.ApiAccess;
 using DataAccessLibrary.Models;
+using static Dapper.SqlMapper;
 
 namespace MærkeDageCalender.Data
 {
-    public class EntityFrameworkCRUD : ICRUD<BirthdayModel>
+    public class EntityFrameworkCRUD : ICRUDBirthday<BirthdayModel>, ICRUDUser<UserModel>
     {
         private readonly EntityFrameworkConnection _dbContext;
 
@@ -13,6 +14,7 @@ namespace MærkeDageCalender.Data
             _dbContext = dbContext;
         }
 
+        #region EventCRUD
         public void CreateBirthday(BirthdayModel entity)
         {
             _dbContext.BirthdayDB.Add(entity);
@@ -45,5 +47,41 @@ namespace MærkeDageCalender.Data
                 _dbContext.SaveChanges();
             }
         }
+        #endregion
+
+        #region UserCRUD
+        public void CreateUser(UserModel user)
+        {
+            _dbContext.UserDB.Add(user);
+            _dbContext.SaveChanges();
+        }
+
+        public List<UserModel> ReadAllUsers()
+        {
+            var result = _dbContext.UserDB.ToList();
+            return result;
+        }
+
+        public UserModel GetUser(int userId)
+        {
+            return _dbContext.UserDB.FirstOrDefault(e => e.Id == userId);
+        }
+
+        public void UpdateUser(UserModel user)
+        {
+            _dbContext.UserDB.Update(user);
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteUser(int userId)
+        {
+            var userToDelete = _dbContext.UserDB.Find(userId);
+            if (userToDelete != null)
+            {
+                _dbContext.UserDB.Remove(userToDelete);
+                _dbContext.SaveChanges();
+            }
+        }
+        #endregion
     }
 }

@@ -19,7 +19,51 @@
 <h1>@date.monthName, @date.year</h1>
 <button @onclick="() => {date.monthsAway--; date.CreateMonth();}" type="button" class="btn btn-primary" style="margin-bottom: 5px;">Previous Month</button>
 <button @onclick="() => {date.monthsAway++; date.CreateMonth();}" type="button" class="btn btn-danger" style="margin-left: 10px; margin-bottom: 5px">Next Month</button>
+<section>
+    @for (int i = 0; i < date.numDummyColumn; i++)
+    {
+        <div></div>
+    }
+    @for (int i = 1; i <= date.monthEnd.Day; i++)
+    {
+        <div>
+            <h2>@i</h2>
+            @if (holidayLists.ListofHolidays != null)
+            {
+                @foreach (var item in holidayLists.ListofHolidays.Where(n => n.date.Date == new DateTime(date.year, date.currentMonth, i).Date))
+                {
+                    @if (@item.nationalHoliday == "false")
+                    {
+                        <p style="color: blue">@item.name</p>
+                    }
+                    else if (@item.nationalHoliday == "true")
+                    {
+                        <p style="color: green">@item.name</p>
+                    }
+                }
+            }
 
+            @if (ListofUsers != null)
+            {
+                @foreach (var user in ListofUsers.Where(n => n.birthday.Month == date.currentMonth && n.birthday.Day == i))
+                {
+                    <p style="color: purple">Birthday: @user.firstName @user.lastName</p>
+                }
+            }
+
+            @if (ListofBirthdays != null)
+            {
+                @foreach (var birthday in ListofBirthdays.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date))
+                {
+                    <p style="color: green">@birthday.EventName</p>
+                    <button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
+                    <button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    <p style="color: blue">@SelectedOptionService.SelectedOption.ToString()</p>
+                }
+            }
+        </div>
+    }
+</section>
 
 @code {
     private List<BirthdayModel> ListofBirthdays = new();
@@ -86,48 +130,4 @@
     }
 }
 
-<section>
-    @for (int i = 0; i < date.numDummyColumn; i++)
-    {
-        <div></div>
-    }
-    @for (int i = 1; i <= date.monthEnd.Day; i++)
-    {
-        <div>
-            <h2>@i</h2>
-            @if (holidayLists.ListofHolidays != null)
-            {
-                @foreach (var item in holidayLists.ListofHolidays.Where(n => n.date.Date == new DateTime(date.year, date.currentMonth, i).Date))
-                {
-                    @if (@item.nationalHoliday == "false")
-                    {
-                        <p style="color: blue">@item.name</p>
-                    }
-                    else if (@item.nationalHoliday == "true")
-                    {
-                        <p style="color: green">@item.name</p>
-                    }
-                }
-            }
 
-            @if (ListofUsers != null)
-                {
-                @foreach (var user in ListofUsers.Where(n => n.birthday.Month == date.currentMonth && n.birthday.Day == i))
-                {
-                    <p style="color: purple">Birthday: @user.firstName @user.lastName</p>
-                }
-            }
-
-            @if (ListofBirthdays != null)
-            {
-                @foreach (var birthday in ListofBirthdays.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date))
-                {
-                    <p style="color: green">@birthday.EventName</p>
-                    <button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
-                    <button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
-                    <p style="color: blue">@SelectedOptionService.SelectedOption.ToString()</p>
-                }
-            }
-        </div>
-    }
-</section>

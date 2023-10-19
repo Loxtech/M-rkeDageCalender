@@ -1,7 +1,5 @@
 ﻿using DataAccessLibrary;
-using DataAccessLibrary.ApiAccess;
 using DataAccessLibrary.Models;
-using static Dapper.SqlMapper;
 
 namespace MærkeDageCalender.Data
 {

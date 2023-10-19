@@ -53,6 +53,30 @@ namespace MærkeDageCalender.Data
             return birthdays;
         }
 
+        // Get(Single)
+        public BirthdayModel GetBirthday(int id)
+        {
+            BirthdayModel birthday = new BirthdayModel();
+            string query = "SELECT Id, Date, EventName FROM BirthdayDB WHERE Id = @Id";
+
+            using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+            using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+            {
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                sqlConnection.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    DateTime date = reader.GetDateTime(1);
+                    string eventName = reader.GetString(2);
+
+                    birthday = new BirthdayModel { Id = id, Date = date, EventName = eventName };
+                }
+            }
+            return birthday;
+        }
+
         // Update
         public void UpdateBirthday(BirthdayModel entity)
         {
@@ -80,12 +104,50 @@ namespace MærkeDageCalender.Data
             sqlConnection.Open();
             cmd.ExecuteNonQuery();
         }
+        #endregion
 
-        // Get(Single)
-        public BirthdayModel GetBirthday(int id)
+        #region UserCRUD
+        public void CreateUser(UserModel user)
         {
-            BirthdayModel birthday = new BirthdayModel();
-            string query = "SELECT Id, Date, EventName FROM BirthdayDB WHERE Id = @Id";
+            string query = "INSERT INTO UserDB (firstName, lastName, birthday) values(@firstName, @lastName, @birthday)";
+            using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+            using SqlCommand cmd = new SqlCommand(query, sqlConnection);
+
+            cmd.Parameters.AddWithValue("@firstName", user.firstName);
+            cmd.Parameters.AddWithValue("@lastName", user.lastName);
+            cmd.Parameters.AddWithValue("@birthday", user.birthday);
+
+            sqlConnection.Open();
+            cmd.ExecuteNonQuery();
+        }
+
+        public List<UserModel> ReadAllUsers()
+        {
+            List<UserModel> users = new List<UserModel>();
+            string query = "SELECT * FROM UserDB";
+
+            using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+            using SqlCommand cmd = new SqlCommand(query, sqlConnection);
+
+            sqlConnection.Open();
+            using SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                int id = reader.GetInt32(0);
+                string firstName = reader.GetString(1);
+                string lastName = reader.GetString(2);
+                DateTime birthday = reader.GetDateTime(3);
+
+                users.Add(new UserModel { Id = id, firstName = firstName, lastName = lastName, birthday = birthday });
+            }
+
+            return users;
+        }
+
+        public UserModel GetUser(int id)
+        {
+            UserModel user = new UserModel();
+            string query = "SELECT Id, firstName, lastName, birthday FROM UserDB WHERE Id = @Id";
 
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
             using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
@@ -93,45 +155,43 @@ namespace MærkeDageCalender.Data
                 cmd.Parameters.AddWithValue("@Id", id);
 
                 sqlConnection.Open();
-                using (SqlDataReader reader = cmd.ExecuteReader())
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                    {
-                        DateTime date = reader.GetDateTime(1);
-                        string eventName = reader.GetString(2);
+                    string firstName = reader.GetString(1);
+                    string lastName = reader.GetString(2);
+                    DateTime birthday = reader.GetDateTime(3);
 
-                        birthday = new BirthdayModel { Id = id, Date = date, EventName = eventName };
-                    }
+                    user = new UserModel { Id = id, firstName = firstName, lastName = lastName, birthday = birthday };
                 }
             }
-            return birthday;
-        }
-        #endregion
-
-        #region UserCRUD
-        public void CreateUser(UserModel user)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<UserModel> ReadAllUsers()
-        {
-            throw new NotImplementedException();
-        }
-
-        public UserModel GetUser(int id)
-        {
-            throw new NotImplementedException();
+            return user;
         }
 
         public void UpdateUser(UserModel user)
         {
-            throw new NotImplementedException();
+            string query = "UPDATE UserDB SET firstName = @firstName, lastName = @lastName, birthday = @birthday WHERE Id = @Id";
+            using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+            using SqlCommand cmd = new SqlCommand(query, sqlConnection);
+
+            cmd.Parameters.AddWithValue("@firstName", user.firstName);
+            cmd.Parameters.AddWithValue("@lastName", user.lastName);
+            cmd.Parameters.AddWithValue("@birthday", user.birthday);
+
+            sqlConnection.Open();
+            cmd.ExecuteNonQuery();
         }
 
         public void DeleteUser(int id)
         {
-            throw new NotImplementedException();
+            string query = "DELETE FROM UserDB WHERE Id = @Id";
+            using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
+            using SqlCommand cmd = new SqlCommand(query, sqlConnection);
+
+            cmd.Parameters.AddWithValue("@Id", id);
+
+            sqlConnection.Open();
+            cmd.ExecuteNonQuery();
         }
         #endregion
     }

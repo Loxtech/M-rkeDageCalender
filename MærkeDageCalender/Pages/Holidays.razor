@@ -6,7 +6,7 @@
 @inject SallingApiAccess access
 @inject PublicHolidayLists holidayLists
 
-<h3>All Holidays</h3>
+<h3>All Holidays: @dateNow.ToShortDateString() - to - @dateFuture.ToShortDateString()</h3>
 
 @if(holidayLists.ListofHolidays != null)
 {

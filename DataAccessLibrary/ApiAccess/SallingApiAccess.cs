@@ -1,36 +1,34 @@
 ﻿using DataAccessLibrary.Models;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace DataAccessLibrary.ApiAccess
 {
     public class SallingApiAccess
     {
+        private readonly IConfiguration _config;
 
-        public List<PublicHolidayModel> _publicHoliday { get; set; } = new List<PublicHolidayModel>();
+        public List<PublicHolidayModel> PublicHoliday { get; set; } = new List<PublicHolidayModel>();
 
+        public SallingApiAccess(IConfiguration config)
+        {
+            _config = config;
+        }
+        
         // Load mærkedage from API
-        public async Task<List<PublicHolidayModel>> GetPublicHolidays()
+        public async Task<List<PublicHolidayModel>?> GetPublicHolidays()
         {
             var httpClient = new HttpClient();
-            DateTime oneYearAgo = DateTime.Now.AddYears(-1);
-            string firstDayOfPreviousYear = new DateTime(oneYearAgo.Year, 1, 1).ToString("yyyy-MM-dd");
-
-            DateTime fourYearsAhead = DateTime.Now.AddYears(+4);
-            string lastDayOfFutureYear = new DateTime(fourYearsAhead.Year, 12, 31).ToString("yyyy-MM-dd");
-
-            string apiUrl = $"https://api.sallinggroup.com/v1/holidays?startDate={firstDayOfPreviousYear}&endDate={lastDayOfFutureYear}";
-            string apiToken = "706fa95d-511a-4ce7-bca6-c58f2bd5bf0a";
+            string apiUrl = $"https://api.sallinggroup.com/v1/holidays?startDate={StartDate()}&endDate={EndDate()}";
+            string? apiToken = _config["ApiTokens:SallingApiToken"];
             httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiToken}");
-            string jsonContent = "{\"key\": \"value\"}";
-            HttpContent content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
-
             HttpResponseMessage response = await httpClient.GetAsync($"{apiUrl}");
 
             if (response.IsSuccessStatusCode)
             {
                 string responseBody = await response.Content.ReadAsStringAsync();
-                List<PublicHolidayModel> apiModels = JsonConvert.DeserializeObject<List<PublicHolidayModel>>(responseBody);
-                return _publicHoliday = apiModels;
+                List<PublicHolidayModel>? apiModels = JsonConvert.DeserializeObject<List<PublicHolidayModel>>(responseBody);
+                return PublicHoliday = apiModels;
             }
             else
             {
@@ -39,5 +37,18 @@ namespace DataAccessLibrary.ApiAccess
                 return null;
             }
         }
+
+        public static string StartDate()
+        {
+            DateTime oneYearAgo = DateTime.Now.AddYears(-1);
+            return new DateTime(oneYearAgo.Year, 1, 1).ToString("yyyy-MM-dd");
+        }
+
+        public static string EndDate()
+        {
+            DateTime fourYearsAhead = DateTime.Now.AddYears(+4);
+            return new DateTime(fourYearsAhead.Year, 12, 31).ToString("yyyy-MM-dd");
+        }
+
     }
 }

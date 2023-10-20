@@ -22,7 +22,8 @@
         <label for="eventName">Event Name:</label>
         <input type="text" class="form-control" id="eventName" @bind="birthdayModel.EventName" />
     </div>
-    <button type="button" class="btn btn-primary" @onclick="UpdateEvent">Save</button>
+    <button type="button" class="btn btn-primary" @onclick="UpdateEvent">
+    <ion-icon name="save-outline" size="large" aria-hidden="true"></ion-icon></button>
 </form>
 
 @code {

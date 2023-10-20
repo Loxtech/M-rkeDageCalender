@@ -56,8 +56,10 @@
                 @foreach (var birthday in ListofBirthdays.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date))
                 {
                     <p style="color: green">@birthday.EventName</p>
-                    <button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button>
-                    <button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button>
+                    <button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" style="margin-bottom: 5px">
+                    <ion-icon name="build-outline" size="large" aria-hidden="true"></ion-icon></button>
+                    <button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">
+                    <ion-icon name="remove-circle-outline" size="large" aria-hidden="true"></ion-icon></button>
                     <p style="color: blue">@SelectedOptionService.SelectedOption.ToString()</p>
                 }
             }

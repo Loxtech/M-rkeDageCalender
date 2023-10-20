@@ -27,7 +27,9 @@
         <label for="Date">Date of Birth</label>
         <input type="date" class="form-control" id="Date" @bind="selectedDate">
     </div>
-    <button type="submit" class="btn btn-primary">Add User</button>
+    <button type="submit" class="btn btn-primary" aria-label="">
+    <ion-icon name="person-add-outline" size="large" aria-hidden="true"></ion-icon>
+    </button>
 </form>
 
 <h3>All Users</h3>
@@ -49,7 +51,8 @@
                 <td>@user.Id</td>
                 <td>@user.firstName @user.lastName</td>
                 <td>@user.birthday.ToShortDateString()</td>
-                <td><button @onclick="() => DeleteAndRefresh(user.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button></td>
+                <td><button @onclick="() => DeleteAndRefresh(user.Id)" type="button" class="btn btn-danger">
+                    <ion-icon name="person-remove-outline" size="large "aria-hidden="true"></ion-icon></button></td>
             </tr>
         }
     </tbody>
@@ -81,8 +84,6 @@
             linq.CreateUser(userModel);
         }
 
-        //userModel = new UserModel();
-        StateHasChanged();
         ReloadPage();
     }
 

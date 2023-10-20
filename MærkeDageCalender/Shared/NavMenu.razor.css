@@ -60,3 +60,8 @@
         display: block;
     }
 }
+
+ion-icon {
+    --ionicon-stroke-width: 32px;
+    font-size: 32px;
+}

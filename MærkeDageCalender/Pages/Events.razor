@@ -23,7 +23,9 @@
         <label for="Date">Dato</label>
         <input type="date" class="form-control" id="Date" @bind="selectedDate">
     </div>
-    <button type="submit" class="btn btn-primary">Add Birthday</button>
+    <button type="submit" class="btn btn-primary">
+        <ion-icon name="add-circle-outline" size="large" aria-label="true"></ion-icon>
+    </button>
 </form>
 
 <h3>All Birthdays</h3>
@@ -44,8 +46,10 @@
                 <td>@birthday.Id</td>
                 <td>@birthday.EventName</td>
                 <td>@birthday.Date.ToShortDateString()</td>
-                <td><button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" style="margin-bottom: 5px">Update</button></td>
-                <td><button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">Delete</button></td>
+                <td><button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" >
+                    <ion-icon name="build-outline" size="large" aria-hidden="true"></ion-icon></button></td>
+                <td><button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" >
+                    <ion-icon name="remove-circle-outline" size="large" aria-hidden="true"></ion-icon></button></td>
 
             </tr>
         }
@@ -74,10 +78,9 @@
             linq.CreateBirthday(birthdayModel);
         }
 
-        birthdayModel = new BirthdayModel();
-        StateHasChanged();
         ReloadPage();
     }
+
     void UpdatePage(int eventId)
     {
         _navigationManager.NavigateTo($"/event/update/{eventId}");

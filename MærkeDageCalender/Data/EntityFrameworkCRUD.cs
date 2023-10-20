@@ -3,7 +3,7 @@ using DataAccessLibrary.Models;
 
 namespace MærkeDageCalender.Data
 {
-    public class EntityFrameworkCRUD : ICRUDBirthday<BirthdayModel>, ICRUDUser<UserModel>
+    public class EntityFrameworkCRUD : ICRUDEvent<EventModel>, ICRUDUser<UserModel>
     {
         private readonly EntityFrameworkConnection _dbContext;
 
@@ -13,35 +13,35 @@ namespace MærkeDageCalender.Data
         }
 
         #region EventCRUD
-        public void CreateBirthday(BirthdayModel entity)
+        public void CreateEvent(EventModel entity)
         {
             _dbContext.BirthdayDB.Add(entity);
             _dbContext.SaveChanges();
         }
 
-        public List<BirthdayModel> ReadAllBirthdays()
+        public List<EventModel> ReadAllEvents()
         {
             var result = _dbContext.BirthdayDB.ToList();
             return result;
         }
 
-        public BirthdayModel GetBirthday(int birthdayId)
+        public EventModel GetEvent(int eventId)
         {
-            return _dbContext.BirthdayDB.FirstOrDefault(e => e.Id == birthdayId);
+            return _dbContext.BirthdayDB.FirstOrDefault(e => e.Id == eventId);
         }
 
-        public void UpdateBirthday(BirthdayModel entity)
+        public void UpdateEvent(EventModel entity)
         {
             _dbContext.BirthdayDB.Update(entity);
             _dbContext.SaveChanges();
         }
 
-        public void DeleteBirthday(int Id)
+        public void DeleteEvent(int Id)
         {
-            var birthdayToDelete = _dbContext.BirthdayDB.Find(Id);
-            if (birthdayToDelete != null)
+            var eventToDelete = _dbContext.BirthdayDB.Find(Id);
+            if (eventToDelete != null)
             {
-                _dbContext.BirthdayDB.Remove(birthdayToDelete);
+                _dbContext.BirthdayDB.Remove(eventToDelete);
                 _dbContext.SaveChanges();
             }
         }

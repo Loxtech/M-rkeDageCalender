@@ -15,17 +15,17 @@ builder.Services.AddSingleton<HttpClient>();
 builder.Services.AddScoped<SallingApiAccess>();
 builder.Services.AddScoped<Date>();
 builder.Services.AddScoped<SelectedOptionService>();
-builder.Services.AddScoped<BirthdayModel>();
+builder.Services.AddScoped<EventModel>();
 builder.Services.AddScoped<UserModel>();
 builder.Services.AddScoped<PublicHolidayLists>();
-builder.Services.AddScoped<BirthdayLists>();
+builder.Services.AddScoped<EventLists>();
 builder.Services.AddScoped<UserLists>();
 
 
 // Entity Framework
 builder.Services.AddDbContext<EntityFrameworkConnection>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 builder.Services.AddScoped<EntityFrameworkCRUD>();
-builder.Services.AddScoped<ICRUDBirthday<BirthdayModel>, EntityFrameworkCRUD>();
+builder.Services.AddScoped<ICRUDEvent<EventModel>, EntityFrameworkCRUD>();
 builder.Services.AddScoped<ICRUDUser<UserModel>, EntityFrameworkCRUD>();
 
 // ADO

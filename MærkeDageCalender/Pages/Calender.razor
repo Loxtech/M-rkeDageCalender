@@ -5,7 +5,7 @@
 @using DataAccessLibrary.ApiAccess
 @using DataAccessLibrary.Models
 
-@inject ICRUDBirthday<BirthdayModel> _db
+@inject ICRUDEvent<EventModel> _db
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
 @inject LinQCRUD linq
@@ -27,7 +27,7 @@
     @for (int i = 1; i <= date.monthEnd.Day; i++)
     {
         <div>
-            <h2>@i</h2>
+            <h2>@i.</h2>
             @if (holidayLists.ListofHolidays != null)
             {
                 @foreach (var item in holidayLists.ListofHolidays.Where(n => n.date.Date == new DateTime(date.year, date.currentMonth, i).Date))
@@ -51,14 +51,14 @@
                 }
             }
 
-            @if (ListofBirthdays != null)
+            @if (ListofEvents != null)
             {
-                @foreach (var birthday in ListofBirthdays.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date))
+                @foreach (var item in ListofEvents.Where(n => n.Date.Date == new DateTime(date.year, date.currentMonth, i).Date))
                 {
-                    <p style="color: green">@birthday.EventName</p>
-                    <button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" style="margin-bottom: 5px">
+                    <p style="color: green">@item.EventName</p>
+                    <button @onclick="() => UpdatePage(item.Id)" type="button" class="btn btn-primary" style="margin-bottom: 5px">
                     <ion-icon name="build-outline" size="large" aria-hidden="true"></ion-icon></button>
-                    <button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">
+                    <button @onclick="() => DeleteAndRefresh(item.Id)" type="button" class="btn btn-danger" style="margin-bottom: 5px">
                     <ion-icon name="remove-circle-outline" size="large" aria-hidden="true"></ion-icon></button>
                     <p style="color: blue">@SelectedOptionService.SelectedOption.ToString()</p>
                 }
@@ -68,7 +68,7 @@
 </section>
 
 @code {
-    private List<BirthdayModel> ListofBirthdays = new();
+    private List<EventModel> ListofEvents = new();
     private List<UserModel> ListofUsers = new();
 
     protected override async Task OnInitializedAsync()
@@ -81,17 +81,17 @@
         date.CreateMonth();
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            ListofBirthdays = entity.ReadAllBirthdays();
+            ListofEvents = entity.ReadAllEvents();
             ListofUsers = entity.ReadAllUsers();
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            ListofBirthdays = sqlcon.ReadAllBirthdays();
+            ListofEvents = sqlcon.ReadAllEvents();
             ListofUsers = sqlcon.ReadAllUsers();
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            ListofBirthdays = linq.ReadAllBirthdays();
+            ListofEvents = linq.ReadAllEvents();
             ListofUsers = linq.ReadAllUsers();
         }
 
@@ -112,21 +112,21 @@
     {
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            entity.DeleteBirthday(id);
+            entity.DeleteEvent(id);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            sqlcon.DeleteBirthday(id);
+            sqlcon.DeleteEvent(id);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            linq.DeleteBirthday(id);
+            linq.DeleteEvent(id);
         }
 
-        var itemToRemove = ListofBirthdays.FirstOrDefault(item => item.Id == id);
+        var itemToRemove = ListofEvents.FirstOrDefault(item => item.Id == id);
         if (itemToRemove != null)
         {
-            ListofBirthdays.Remove(itemToRemove);
+            ListofEvents.Remove(itemToRemove);
         }
         StateHasChanged();
     }

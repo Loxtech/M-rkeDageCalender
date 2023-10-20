@@ -4,7 +4,7 @@ using Microsoft.Data.SqlClient;
 
 namespace MærkeDageCalender.Data
 {
-    public class SqlConnectionCRUD : ICRUDBirthday<BirthdayModel>, ICRUDUser<UserModel>
+    public class SqlConnectionCRUD : ICRUDEvent<EventModel>, ICRUDUser<UserModel>
     {
         private IConfiguration _configuration;
         private string? ConnectionString => _configuration["ConnectionStrings:Default"];
@@ -16,7 +16,7 @@ namespace MærkeDageCalender.Data
 
         #region EventCRUD
         // Create
-        public void CreateBirthday(BirthdayModel entity)
+        public void CreateEvent(EventModel entity)
         {
             string query = "INSERT INTO BirthdayDB (Date, EventName) values(@Date, @EventName)";
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
@@ -30,9 +30,9 @@ namespace MærkeDageCalender.Data
         }
 
         // Read(All)
-        public List<BirthdayModel> ReadAllBirthdays()
+        public List<EventModel> ReadAllEvents()
         {
-            List<BirthdayModel> birthdays = new List<BirthdayModel>();
+            List<EventModel> Events = new List<EventModel>();
             string query = "SELECT * FROM BirthdayDB";
 
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
@@ -47,16 +47,16 @@ namespace MærkeDageCalender.Data
                 DateTime date = reader.GetDateTime(1);
                 string eventName = reader.GetString(2);
 
-                birthdays.Add(new BirthdayModel { Id = id, Date = date, EventName = eventName });
+                Events.Add(new EventModel { Id = id, Date = date, EventName = eventName });
             }
 
-            return birthdays;
+            return Events;
         }
 
         // Get(Single)
-        public BirthdayModel GetBirthday(int id)
+        public EventModel GetEvent(int id)
         {
-            BirthdayModel birthday = new BirthdayModel();
+            EventModel Event = new EventModel();
             string query = "SELECT Id, Date, EventName FROM BirthdayDB WHERE Id = @Id";
 
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
@@ -71,14 +71,14 @@ namespace MærkeDageCalender.Data
                     DateTime date = reader.GetDateTime(1);
                     string eventName = reader.GetString(2);
 
-                    birthday = new BirthdayModel { Id = id, Date = date, EventName = eventName };
+                    Event = new EventModel { Id = id, Date = date, EventName = eventName };
                 }
             }
-            return birthday;
+            return Event;
         }
 
         // Update
-        public void UpdateBirthday(BirthdayModel entity)
+        public void UpdateEvent(EventModel entity)
         {
             string query = "UPDATE BirthdayDB SET Date = @Date, EventName = @EventName WHERE Id = @Id";
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
@@ -93,7 +93,7 @@ namespace MærkeDageCalender.Data
         }
 
         // Delete
-        public void DeleteBirthday(int id)
+        public void DeleteEvent(int id)
         {
             string query = "DELETE FROM BirthdayDB WHERE Id = @Id";
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);

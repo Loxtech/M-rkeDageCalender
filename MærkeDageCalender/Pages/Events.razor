@@ -4,20 +4,20 @@
 @using DataAccessLibrary
 @using DataAccessLibrary.Models
 
-@inject ICRUDBirthday<BirthdayModel> _db
+@inject ICRUDEvent<EventModel> _db
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
 @inject LinQCRUD linq
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
-@inject BirthdayLists birthdayLists
-@inject BirthdayModel birthdayModel
+@inject EventLists EventLists
+@inject EventModel EventModel
 
 <h3>Add Events</h3>
-<form @onsubmit="AddNewBirthday">
+<form @onsubmit="AddNewEvent">
     <div class="form-group">
         <label for="Name">Navn</label>
-        <input type="text" class="form-control" id="Name" @bind="birthdayModel.EventName">
+        <input type="text" class="form-control" id="Name" @bind="EventModel.EventName">
     </div>
     <div class="form-group">
         <label for="Date">Dato</label>
@@ -28,7 +28,7 @@
     </button>
 </form>
 
-<h3>All Birthdays</h3>
+<h3>All Events</h3>
 <table class="table">
     <thead>
         <tr>
@@ -40,15 +40,15 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var birthday in birthdayLists.ListofBirthdays)
+        @foreach (var item in EventLists.ListofEvents)
         {
             <tr>
-                <td>@birthday.Id</td>
-                <td>@birthday.EventName</td>
-                <td>@birthday.Date.ToShortDateString()</td>
-                <td><button @onclick="() => UpdatePage(birthday.Id)" type="button" class="btn btn-primary" >
+                <td>@item.Id</td>
+                <td>@item.EventName</td>
+                <td>@item.Date.ToShortDateString()</td>
+                <td><button @onclick="() => UpdatePage(item.Id)" type="button" class="btn btn-primary" >
                     <ion-icon name="build-outline" size="large" aria-hidden="true"></ion-icon></button></td>
-                <td><button @onclick="() => DeleteAndRefresh(birthday.Id)" type="button" class="btn btn-danger" >
+                <td><button @onclick="() => DeleteAndRefresh(item.Id)" type="button" class="btn btn-danger" >
                     <ion-icon name="remove-circle-outline" size="large" aria-hidden="true"></ion-icon></button></td>
 
             </tr>
@@ -59,23 +59,23 @@
 @code {
     private DateTime selectedDate = DateTime.Now;
 
-    protected override async Task OnInitializedAsync() => birthdayLists.ListofBirthdays = _db.ReadAllBirthdays();
+    protected override async Task OnInitializedAsync() => EventLists.ListofEvents = _db.ReadAllEvents();
 
-    public void AddNewBirthday()
+    public void AddNewEvent()
     {
-        birthdayModel.Date = selectedDate;
+        EventModel.Date = selectedDate;
 
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            entity.CreateBirthday(birthdayModel);
+            entity.CreateEvent(EventModel);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            sqlcon.CreateBirthday(birthdayModel);
+            sqlcon.CreateEvent(EventModel);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            linq.CreateBirthday(birthdayModel);
+            linq.CreateEvent(EventModel);
         }
 
         ReloadPage();
@@ -90,21 +90,21 @@
     {
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            entity.DeleteBirthday(id);
+            entity.DeleteEvent(id);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            sqlcon.DeleteBirthday(id);
+            sqlcon.DeleteEvent(id);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            linq.DeleteBirthday(id);
+            linq.DeleteEvent(id);
         }
 
-        var itemToRemove = birthdayLists.ListofBirthdays.FirstOrDefault(item => item.Id == id);
+        var itemToRemove = EventLists.ListofEvents.FirstOrDefault(item => item.Id == id);
         if (itemToRemove != null)
         {
-            birthdayLists.ListofBirthdays.Remove(itemToRemove);
+            EventLists.ListofEvents.Remove(itemToRemove);
         }
 
         StateHasChanged();

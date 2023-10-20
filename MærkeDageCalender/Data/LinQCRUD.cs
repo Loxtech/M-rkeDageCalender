@@ -3,30 +3,30 @@ using DataAccessLibrary.Models;
 
 namespace MærkeDageCalender.Data
 {
-    public class LinQCRUD : ICRUDBirthday<BirthdayModel>, ICRUDUser<UserModel>
+    public class LinQCRUD : ICRUDEvent<EventModel>, ICRUDUser<UserModel>
     {
         #region EventCRUD
-        public void CreateBirthday(BirthdayModel entity)
+        public void CreateEvent(EventModel entity)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteBirthday(int id)
+        public void DeleteEvent(int id)
         {
             throw new NotImplementedException();
         }
 
-        public BirthdayModel GetBirthday(int id)
+        public EventModel GetEvent(int id)
         {
             throw new NotImplementedException();
         }
 
-        public List<BirthdayModel> ReadAllBirthdays()
+        public List<EventModel> ReadAllEvents()
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateBirthday(BirthdayModel entity)
+        public void UpdateEvent(EventModel entity)
         {
             throw new NotImplementedException();
         }

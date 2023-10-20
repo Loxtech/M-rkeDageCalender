@@ -2,13 +2,13 @@
 
 namespace DataAccessLibrary
 {
-    public interface ICRUDBirthday<T>
+    public interface ICRUDEvent<T>
     {
-        void CreateBirthday(T entity);
-        List<T> ReadAllBirthdays();
-        T GetBirthday(int id);
-        void UpdateBirthday(T entity);
-        void DeleteBirthday(int id);
+        void CreateEvent(T entity);
+        List<T> ReadAllEvents();
+        T GetEvent(int id);
+        void UpdateEvent(T entity);
+        void DeleteEvent(int id);
     }
 
     public interface ICRUDUser<T>

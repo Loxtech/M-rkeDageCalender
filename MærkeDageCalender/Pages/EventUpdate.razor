@@ -9,18 +9,18 @@
 @inject Date date
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
-@inject BirthdayModel birthdayModel
+@inject EventModel EventModel
 
 <h3>Edit Event</h3>
 
 <form>
     <div class="form-group">
         <label for="eventDate">Event Date:</label>
-        <input type="date" class="form-control" id="eventDate" @bind="birthdayModel.Date" />
+        <input type="date" class="form-control" id="eventDate" @bind="EventModel.Date" />
     </div>
     <div class="form-group">
         <label for="eventName">Event Name:</label>
-        <input type="text" class="form-control" id="eventName" @bind="birthdayModel.EventName" />
+        <input type="text" class="form-control" id="eventName" @bind="EventModel.EventName" />
     </div>
     <button type="button" class="btn btn-primary" @onclick="UpdateEvent">
     <ion-icon name="save-outline" size="large" aria-hidden="true"></ion-icon></button>
@@ -30,20 +30,19 @@
 
     [Parameter] public int eventId { get; set; }
 
-
     private void UpdateEvent()
     {
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            entity.UpdateBirthday(birthdayModel);
+            entity.UpdateEvent(EventModel);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            sqlcon.UpdateBirthday(birthdayModel);
+            sqlcon.UpdateEvent(EventModel);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            linq.UpdateBirthday(birthdayModel);
+            linq.UpdateEvent(EventModel);
         }
 
         _navigationManager.NavigateTo("/Calender");
@@ -53,15 +52,15 @@
     {
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            birthdayModel = entity.GetBirthday(eventId);
+            EventModel = entity.GetEvent(eventId);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            birthdayModel = sqlcon.GetBirthday(eventId);
+            EventModel = sqlcon.GetEvent(eventId);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            birthdayModel = linq.GetBirthday(eventId);
+            EventModel = linq.GetEvent(eventId);
         }
     }
 }

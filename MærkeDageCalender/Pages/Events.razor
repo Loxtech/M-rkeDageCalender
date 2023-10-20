@@ -10,12 +10,14 @@
 @inject LinQCRUD linq
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
+@inject BirthdayLists birthdayLists
+@inject BirthdayModel birthdayModel
 
 <h3>Add Events</h3>
 <form @onsubmit="AddNewBirthday">
     <div class="form-group">
         <label for="Name">Navn</label>
-        <input type="text" class="form-control" id="Name" @bind="newBirthday.EventName">
+        <input type="text" class="form-control" id="Name" @bind="birthdayModel.EventName">
     </div>
     <div class="form-group">
         <label for="Date">Dato</label>
@@ -36,7 +38,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var birthday in birthdayList)
+        @foreach (var birthday in birthdayLists.ListofBirthdays)
         {
             <tr>
                 <td>@birthday.Id</td>
@@ -51,31 +53,28 @@
 </table>
 
 @code {
-    private BirthdayModel newBirthday = new BirthdayModel();
-    public DateTime selectedDate = DateTime.Now;
-    List<BirthdayModel> birthdayList = new List<BirthdayModel>();
-    private List<BirthdayModel> ListofBirthdays = new();
+    private DateTime selectedDate = DateTime.Now;
 
-    protected override async Task OnInitializedAsync() => birthdayList = _db.ReadAllBirthdays();
+    protected override async Task OnInitializedAsync() => birthdayLists.ListofBirthdays = _db.ReadAllBirthdays();
 
     public void AddNewBirthday()
     {
-        newBirthday.Date = selectedDate;
+        birthdayModel.Date = selectedDate;
 
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            entity.CreateBirthday(newBirthday);
+            entity.CreateBirthday(birthdayModel);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            sqlcon.CreateBirthday(newBirthday);
+            sqlcon.CreateBirthday(birthdayModel);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            linq.CreateBirthday(newBirthday);
+            linq.CreateBirthday(birthdayModel);
         }
 
-        newBirthday = new BirthdayModel();
+        birthdayModel = new BirthdayModel();
         StateHasChanged();
         ReloadPage();
     }
@@ -99,10 +98,10 @@
             linq.DeleteBirthday(id);
         }
 
-        var itemToRemove = ListofBirthdays.FirstOrDefault(item => item.Id == id);
+        var itemToRemove = birthdayLists.ListofBirthdays.FirstOrDefault(item => item.Id == id);
         if (itemToRemove != null)
         {
-            ListofBirthdays.Remove(itemToRemove);
+            birthdayLists.ListofBirthdays.Remove(itemToRemove);
         }
 
         StateHasChanged();
@@ -111,6 +110,6 @@
 
     private void ReloadPage()
     {
-        _navigationManager.NavigateTo("/Events");
+        _navigationManager.NavigateTo("/Events", true);
     }
 }

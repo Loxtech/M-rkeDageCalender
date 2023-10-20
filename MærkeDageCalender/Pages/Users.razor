@@ -10,16 +10,18 @@
 @inject SqlConnectionCRUD sqlcon
 @inject LinQCRUD linq
 @inject NavigationManager _navigationManager
+@inject UserLists userLists
+@inject UserModel userModel
 
 <h3>Add New User</h3>
 <form @onsubmit="AddNewUser">
     <div class="form-group">
         <label for="firstName">First Name</label>
-        <input type="text" class="form-control" id="firstName" @bind="newUser.firstName">
+        <input type="text" class="form-control" id="firstName" @bind="userModel.firstName">
     </div>
     <div class="form-group">
         <label for="lastName">Last Name</label>
-        <input type="text" class="form-control" id="lastName" @bind="newUser.lastName">
+        <input type="text" class="form-control" id="lastName" @bind="userModel.lastName">
     </div>
     <div class="form-group">
         <label for="Date">Date of Birth</label>
@@ -29,7 +31,9 @@
 </form>
 
 <h3>All Users</h3>
-<table class="table">
+@if (userLists.ListofUsers != null)
+    {
+    <table class="table">
     <thead>
         <tr>
             <th>ID</th>
@@ -39,7 +43,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in UserList)
+        @foreach (var user in userLists.ListofUsers)
         {
             <tr>
                 <td>@user.Id</td>
@@ -49,34 +53,35 @@
             </tr>
         }
     </tbody>
-</table>
+    </table>
+ }
+ else
+ {
+    <p>Loading...</p>
+ }
 
 @code {
-    private UserModel newUser = new UserModel();
     private DateTime selectedDate = new DateTime(2000, 1, 1);
-    List<UserModel> UserList = new List<UserModel>();
-    private List<UserModel> ListofUsers = new();
-
-    protected override async Task OnInitializedAsync() => UserList = _db.ReadAllUsers();
+    protected override async Task OnInitializedAsync() => userLists.ListofUsers = _db.ReadAllUsers();
 
     public void AddNewUser()
     {
-        newUser.birthday = selectedDate;
+        userModel.birthday = selectedDate;
 
         if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
         {
-            entity.CreateUser(newUser);
+            entity.CreateUser(userModel);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
-            sqlcon.CreateUser(newUser);
+            sqlcon.CreateUser(userModel);
         }
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
         {
-            linq.CreateUser(newUser);
+            linq.CreateUser(userModel);
         }
 
-        newUser = new UserModel();
+        //userModel = new UserModel();
         StateHasChanged();
         ReloadPage();
     }
@@ -96,10 +101,10 @@
             linq.DeleteUser(id);
         }
 
-        var itemToRemove = ListofUsers.FirstOrDefault(item => item.Id == id);
+        var itemToRemove = userLists.ListofUsers.FirstOrDefault(item => item.Id == id);
         if (itemToRemove != null)
         {
-            ListofUsers.Remove(itemToRemove);
+            userLists.ListofUsers.Remove(itemToRemove);
         }
         StateHasChanged();
         ReloadPage();

@@ -16,11 +16,11 @@
 <h3>Add Events</h3>
 <form @onsubmit="AddNewEvent">
     <div class="form-group">
-        <label for="Name">Navn</label>
+        <label for="Name">Event Name</label>
         <input type="text" class="form-control" id="Name" @bind="EventModel.EventName">
     </div>
     <div class="form-group">
-        <label for="Date">Dato</label>
+        <label for="Date">Date of Event</label>
         <input type="date" class="form-control" id="Date" @bind="selectedDate">
     </div>
     <button type="submit" class="btn btn-primary">

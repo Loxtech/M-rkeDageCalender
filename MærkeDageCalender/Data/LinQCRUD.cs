@@ -5,6 +5,14 @@ namespace MærkeDageCalender.Data
 {
     public class LinQCRUD : ICRUDEvent<EventModel>, ICRUDUser<UserModel>
     {
+        private readonly EntityFrameworkConnection _dbContext;
+
+        public LinQCRUD(EntityFrameworkConnection dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+
         #region EventCRUD
         public void CreateEvent(EventModel entity)
         {

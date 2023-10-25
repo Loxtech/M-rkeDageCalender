@@ -41,6 +41,7 @@
             <th>ID</th>
             <th>Name of User</th>
             <th>Users Birthday</th>
+            <th>Update User</th>
             <th>Delete User</th>
         </tr>
     </thead>
@@ -51,8 +52,10 @@
                 <td>@user.Id</td>
                 <td>@user.firstName @user.lastName</td>
                 <td>@user.birthday.ToShortDateString()</td>
+                <td><button @onclick="() => UpdatePage(user.Id)" type="button" class="btn btn-primary">
+                        <ion-icon name="build-outline" size="large" aria-hidden="true"></ion-icon></button></td>
                 <td><button @onclick="() => DeleteAndRefresh(user.Id)" type="button" class="btn btn-danger">
-                    <ion-icon name="person-remove-outline" size="large "aria-hidden="true"></ion-icon></button></td>
+                        <ion-icon name="person-remove-outline" size="large " aria-hidden="true"></ion-icon></button></td>
             </tr>
         }
     </tbody>
@@ -85,6 +88,11 @@
         }
 
         ReloadPage();
+    }
+
+    void UpdatePage(int userId)
+    {
+        _navigationManager.NavigateTo($"/user/update/{userId}");
     }
 
     private void DeleteAndRefresh(int id)

@@ -1,0 +1,71 @@
+﻿@page "/user/update/{userId:int}"
+
+@using MærkeDageCalender.Data
+@using DataAccessLibrary.Models
+
+@inject EntityFrameworkCRUD entity
+@inject SqlConnectionCRUD sqlcon
+@inject LinQCRUD linq
+@inject Date date
+@inject SelectedOptionService SelectedOptionService
+@inject NavigationManager _navigationManager
+@inject UserModel UserModel
+
+<h3>Edit User</h3>
+
+<form>
+    <div class="form-group">
+        <label for="firstName">First Name:</label>
+        <input type="text" class="form-control" id="firstName" @bind="UserModel.firstName" />
+    </div>
+    <div class="form-group">
+        <label for="lastName">Last Name:</label>
+        <input type="text" class="form-control" id="lastName" @bind="UserModel.lastName" />
+    </div>
+    <div class="form-group">
+        <label for="birthday">Birthday:</label>
+        <input type="date" class="form-control" id="birthday" @bind="UserModel.birthday" />
+    </div>
+    <button type="button" class="btn btn-primary" @onclick="UpdateUser">
+        <ion-icon name="save-outline" size="large" aria-hidden="true"></ion-icon>
+    </button>
+</form>
+
+@code {
+
+    [Parameter] public int userId { get; set; }
+
+    private void UpdateUser()
+    {
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+        {
+            entity.UpdateUser(UserModel);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+        {
+            sqlcon.UpdateUser(UserModel);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+        {
+            linq.UpdateUser(UserModel);
+        }
+
+        _navigationManager.NavigateTo("/Users");
+    }
+
+    protected override void OnInitialized()
+    {
+        if (SelectedOptionService.SelectedOption == CRUDTypeEnum.entityFramework.ToString())
+        {
+            UserModel = entity.GetUser(userId);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
+        {
+            UserModel = sqlcon.GetUser(userId);
+        }
+        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
+        {
+            UserModel = linq.GetUser(userId);
+        }
+    }
+}

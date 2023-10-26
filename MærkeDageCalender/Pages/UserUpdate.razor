@@ -5,7 +5,6 @@
 
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
-@inject LinQCRUD linq
 @inject Date date
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
@@ -45,11 +44,7 @@
         {
             sqlcon.UpdateUser(UserModel);
         }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            linq.UpdateUser(UserModel);
-        }
-
+        
         _navigationManager.NavigateTo("/Users");
     }
 
@@ -62,10 +57,6 @@
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
             UserModel = sqlcon.GetUser(userId);
-        }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            UserModel = linq.GetUser(userId);
         }
     }
 }

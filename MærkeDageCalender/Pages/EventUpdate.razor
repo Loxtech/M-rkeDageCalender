@@ -5,7 +5,6 @@
 
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
-@inject LinQCRUD linq
 @inject Date date
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
@@ -40,10 +39,6 @@
         {
             sqlcon.UpdateEvent(EventModel);
         }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            linq.UpdateEvent(EventModel);
-        }
 
         _navigationManager.NavigateTo("/Calender");
     }
@@ -57,10 +52,6 @@
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
             EventModel = sqlcon.GetEvent(eventId);
-        }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            EventModel = linq.GetEvent(eventId);
         }
     }
 }

@@ -9,8 +9,7 @@
     public enum CRUDTypeEnum
     {
         entityFramework,
-        sqlCon,
-        linQ
+        sqlCon
     }
 
 }

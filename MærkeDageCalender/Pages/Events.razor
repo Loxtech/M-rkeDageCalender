@@ -7,7 +7,6 @@
 @inject ICRUDEvent<EventModel> _db
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
-@inject LinQCRUD linq
 @inject SelectedOptionService SelectedOptionService
 @inject NavigationManager _navigationManager
 @inject EventLists EventLists
@@ -73,10 +72,6 @@
         {
             sqlcon.CreateEvent(EventModel);
         }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            linq.CreateEvent(EventModel);
-        }
 
         ReloadPage();
     }
@@ -95,10 +90,6 @@
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
             sqlcon.DeleteEvent(id);
-        }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            linq.DeleteEvent(id);
         }
 
         var itemToRemove = EventLists.ListofEvents.FirstOrDefault(item => item.Id == id);

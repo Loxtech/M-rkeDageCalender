@@ -31,9 +31,6 @@ builder.Services.AddScoped<ICRUDUser<UserModel>, EntityFrameworkCRUD>();
 // ADO
 builder.Services.AddScoped<SqlConnectionCRUD>();
 
-// LinQ
-builder.Services.AddScoped<LinQCRUD>();
-
 
 
 

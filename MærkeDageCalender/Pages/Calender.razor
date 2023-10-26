@@ -8,7 +8,6 @@
 @inject ICRUDEvent<EventModel> _db
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
-@inject LinQCRUD linq
 @inject SallingApiAccess access
 @inject Date date
 @inject SelectedOptionService SelectedOptionService
@@ -89,11 +88,6 @@
             ListofEvents = sqlcon.ReadAllEvents();
             ListofUsers = sqlcon.ReadAllUsers();
         }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            ListofEvents = linq.ReadAllEvents();
-            ListofUsers = linq.ReadAllUsers();
-        }
 
         if (holidayLists.ListofHolidays == null || holidayLists.ListofHolidays.Count == 0)
         {
@@ -117,10 +111,6 @@
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
             sqlcon.DeleteEvent(id);
-        }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            linq.DeleteEvent(id);
         }
 
         var itemToRemove = ListofEvents.FirstOrDefault(item => item.Id == id);

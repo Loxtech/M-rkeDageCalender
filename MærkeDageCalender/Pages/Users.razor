@@ -8,7 +8,6 @@
 @inject SelectedOptionService SelectedOptionService
 @inject EntityFrameworkCRUD entity
 @inject SqlConnectionCRUD sqlcon
-@inject LinQCRUD linq
 @inject NavigationManager _navigationManager
 @inject UserLists userLists
 @inject UserModel userModel
@@ -82,10 +81,6 @@
         {
             sqlcon.CreateUser(userModel);
         }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            linq.CreateUser(userModel);
-        }
 
         ReloadPage();
     }
@@ -104,10 +99,6 @@
         else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.sqlCon.ToString())
         {
             sqlcon.DeleteUser(id);
-        }
-        else if (SelectedOptionService.SelectedOption == CRUDTypeEnum.linQ.ToString())
-        {
-            linq.DeleteUser(id);
         }
 
         var itemToRemove = userLists.ListofUsers.FirstOrDefault(item => item.Id == id);

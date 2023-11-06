@@ -15,33 +15,33 @@ namespace MærkeDageCalender.Data
         #region EventCRUD
         public void CreateEvent(EventModel entity)
         {
-            _dbContext.BirthdayDB.Add(entity);
+            _dbContext.EventDB.Add(entity);
             _dbContext.SaveChanges();
         }
 
         public List<EventModel> ReadAllEvents()
         {
-            var result = _dbContext.BirthdayDB.ToList();
+            var result = _dbContext.EventDB.ToList();
             return result;
         }
 
         public EventModel GetEvent(int eventId)
         {
-            return _dbContext.BirthdayDB.FirstOrDefault(e => e.Id == eventId);
+            return _dbContext.EventDB.FirstOrDefault(e => e.Id == eventId);
         }
 
         public void UpdateEvent(EventModel entity)
         {
-            _dbContext.BirthdayDB.Update(entity);
+            _dbContext.EventDB.Update(entity);
             _dbContext.SaveChanges();
         }
 
         public void DeleteEvent(int Id)
         {
-            var eventToDelete = _dbContext.BirthdayDB.Find(Id);
+            var eventToDelete = _dbContext.EventDB.Find(Id);
             if (eventToDelete != null)
             {
-                _dbContext.BirthdayDB.Remove(eventToDelete);
+                _dbContext.EventDB.Remove(eventToDelete);
                 _dbContext.SaveChanges();
             }
         }

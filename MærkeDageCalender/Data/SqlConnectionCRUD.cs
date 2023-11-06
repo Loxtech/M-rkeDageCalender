@@ -18,7 +18,7 @@ namespace MærkeDageCalender.Data
         // Create
         public void CreateEvent(EventModel entity)
         {
-            string query = "INSERT INTO BirthdayDB (Date, EventName) values(@Date, @EventName)";
+            string query = "INSERT INTO EventDB (Date, EventName) values(@Date, @EventName)";
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
             using SqlCommand cmd = new SqlCommand(query, sqlConnection);
 
@@ -33,7 +33,7 @@ namespace MærkeDageCalender.Data
         public List<EventModel> ReadAllEvents()
         {
             List<EventModel> Events = new List<EventModel>();
-            string query = "SELECT * FROM BirthdayDB";
+            string query = "SELECT * FROM EventDB";
 
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
             using SqlCommand cmd = new SqlCommand(query, sqlConnection);
@@ -57,7 +57,7 @@ namespace MærkeDageCalender.Data
         public EventModel GetEvent(int id)
         {
             EventModel Event = new EventModel();
-            string query = "SELECT Id, Date, EventName FROM BirthdayDB WHERE Id = @Id";
+            string query = "SELECT Id, Date, EventName FROM EventDB WHERE Id = @Id";
 
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
             using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
@@ -80,7 +80,7 @@ namespace MærkeDageCalender.Data
         // Update
         public void UpdateEvent(EventModel entity)
         {
-            string query = "UPDATE BirthdayDB SET Date = @Date, EventName = @EventName WHERE Id = @Id";
+            string query = "UPDATE EventDB SET Date = @Date, EventName = @EventName WHERE Id = @Id";
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
             using SqlCommand cmd = new SqlCommand(query, sqlConnection);
 
@@ -95,7 +95,7 @@ namespace MærkeDageCalender.Data
         // Delete
         public void DeleteEvent(int id)
         {
-            string query = "DELETE FROM BirthdayDB WHERE Id = @Id";
+            string query = "DELETE FROM EventDB WHERE Id = @Id";
             using SqlConnection sqlConnection = new SqlConnection(ConnectionString);
             using SqlCommand cmd = new SqlCommand(query, sqlConnection);
 
